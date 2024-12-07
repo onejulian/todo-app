@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Minimalist Todo List</title>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+      </head>
+      <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
+          <h1 class="text-2xl font-bold mb-4">Todo List</h1>
+          <input type="text" id="new-task" class="w-full px-3 py-2 border border-gray-300 rounded mb-4 focus:outline-none focus:border-blue-500" placeholder="Add a new task...">
+          <button id="add-task-btn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Task</button>
+          <ul id="task-list" class="mt-4 space-y-2"></ul>
+        </div>
+
+        <script>
+          const tasksKey = 'tasks';
+
+          function loadTasks() {
+            const tasks = JSON.parse(localStorage.getItem(tasksKey)) || [];
+            tasks.forEach(taskText => {
+              addTaskToList(taskText);
+            });
+          }
+
+          function saveTasks(tasks) {
+            localStorage.setItem(tasksKey, JSON.stringify(tasks));
+          }
+
+          function addTaskToList(taskText) {
+            const li = document.createElement('li');
+            li.className = 'bg-gray-100 p-2 rounded flex justify-between items-center';
+            li.innerHTML = `
+              <span class="text-gray-800">${taskText}</span>
+              <button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
+            `;
+            document.getElementById('task-list').appendChild(li);
+          }
+
+          document.getElementById('add-task-btn').addEventListener('click', function() {
+            const taskInput = document.getElementById('new-task');
+            const taskText = taskInput.value.trim();
+            if (taskText) {
+              addTaskToList(taskText);
+              const tasks = JSON.parse(localStorage.getItem(tasksKey)) || [];
+              tasks.push(taskText);
+              saveTasks(tasks);
+              taskInput.value = '';
+            }
+          });
+
+          document.getElementById('task-list').addEventListener('click', function(event) {
+            if (event.target.tagName === 'BUTTON') {
+              event.target.parentElement.remove();
+              const tasks = JSON.parse(localStorage.getItem(tasksKey)) || [];
+              const updatedTasks = tasks.filter(task => task !== event.target.previousElementSibling.textContent);
+              saveTasks(updatedTasks);
+            }
+          });
+
+          loadTasks();
+        </script>
+      </body>
+    </html>
