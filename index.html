@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo List App</title>
+    <title>Todo List App con Sistema de Puntos</title>
     
     <!-- Script inline para aplicar la clase 'dark' antes de cargar Tailwind CSS -->
     <script>
@@ -72,17 +72,27 @@
     </header>
     <main class="flex items-center justify-center flex-grow w-full px-4 sm:px-6 lg:px-8">
         <div class="bg-gray-100 p-6 rounded-lg shadow-md w-full max-w-md dark:bg-gray-800 dark:text-white">
-            <input 
-                type="text" 
-                id="todoInput" 
-                placeholder="Añadir una nueva tarea" 
-                class="w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white dark:bg-gray-700 text-lg"
-            >
+            <div class="flex justify-between items-center mb-4">
+                <input 
+                    type="text" 
+                    id="todoInput" 
+                    placeholder="Añadir una nueva tarea" 
+                    class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white dark:bg-gray-700 text-lg"
+                >
+                <button 
+                    id="addButton" 
+                    class="ml-2 bg-blue-500 text-white p-3 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+                    title="Añadir Tarea"
+                >
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
             <button 
-                id="addButton" 
-                class="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+                id="showPoints" 
+                class="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 text-lg mb-4"
+                title="Ver Puntos"
             >
-                Añadir Tarea
+                Puntos: <span id="pointsDisplay">0</span>
             </button>
             <ul id="todoList" class="mt-6 space-y-3 max-h-[300px] overflow-y-auto">
                 <!-- Las tareas se agregarán aquí -->
@@ -90,7 +100,94 @@
         </div>
     </main>
 
+    <!-- Modal para mostrar puntos detallados -->
+    <div id="pointsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 class="text-2xl font-bold mb-4">Tus Puntos</h2>
+            <p class="text-lg">Puntos actuales: <span id="pointsModalDisplay">0</span></p>
+            <div class="flex justify-end space-x-4 mt-6">
+                <button id="resetPointsButton" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    Reiniciar Puntos
+                </button>
+                <button id="closePointsModal" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación para Reiniciar Puntos -->
+    <div id="confirmResetModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 class="text-2xl font-bold mb-4">Confirmar Reinicio de Puntos</h2>
+            <p class="text-lg">¿Estás seguro de que deseas reiniciar tus puntos a 0? Esta acción no se puede deshacer.</p>
+            <div class="flex justify-end space-x-4 mt-6">
+                <button id="confirmResetYes" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    Sí, Reiniciar
+                </button>
+                <button id="confirmResetNo" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Éxito (Opcional) -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 class="text-2xl font-bold mb-4">Éxito</h2>
+            <p class="text-lg" id="successMessage">Tus puntos han sido reiniciados a 0.</p>
+            <div class="flex justify-end space-x-4 mt-6">
+                <button id="closeSuccessModal" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Inicialización de variables de puntos
+        let points = 0;
+
+        // Función para actualizar la visualización de puntos
+        function updatePointsDisplay() {
+            document.getElementById('pointsDisplay').textContent = points;
+            document.getElementById('pointsModalDisplay').textContent = points;
+        }
+
+        // Función para sumar puntos
+        function addPoints(amount) {
+            points += amount;
+            updatePointsDisplay();
+            savePoints();
+        }
+
+        // Función para restar puntos
+        function subtractPoints(amount) {
+            points = Math.max(0, points - amount); // Evita puntos negativos
+            updatePointsDisplay();
+            savePoints();
+        }
+
+        // Función para reiniciar puntos
+        function resetPoints() {
+            points = 0;
+            updatePointsDisplay();
+            savePoints();
+        }
+
+        // Función para guardar puntos en localStorage
+        function savePoints() {
+            localStorage.setItem('points', points);
+        }
+
+        // Función para cargar puntos desde localStorage
+        function loadPoints() {
+            const savedPoints = parseInt(localStorage.getItem('points'), 10);
+            points = isNaN(savedPoints) ? 0 : savedPoints;
+            updatePointsDisplay();
+        }
+
         // Función para actualizar el ícono del modo
         function updateModeIcon() {
             const icon = document.getElementById('modeIcon');
@@ -103,7 +200,12 @@
 
         // Función para guardar el estado en localStorage
         function saveState() {
-            const tasks = Array.from(document.querySelectorAll('.task-text')).map(span => span.textContent);
+            const tasks = Array.from(document.querySelectorAll('.task')).map(task => ({
+                text: task.querySelector('.task-text').textContent,
+                createdAt: task.dataset.createdAt,
+                completed: task.classList.contains('completed'),
+                overdue: task.classList.contains('overdue')
+            }));
             localStorage.setItem('tasks', JSON.stringify(tasks));
 
             // Guardar el modo actual
@@ -113,26 +215,58 @@
 
         // Función para cargar el estado desde localStorage
         function loadState() {
+            loadPoints();
+
             const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-            tasks.forEach(taskText => addTask(taskText));
+            // Invertir el array para que las tareas más recientes aparezcan primero
+            tasks.slice().reverse().forEach(task => addTask(task));
 
             // El modo ya se aplica en el script inline al cargar la página
             updateModeIcon();
+
+            // Verificar tareas atrasadas
+            checkOverdueTasks();
         }
 
         // Función para añadir una tarea
-        function addTask(taskText) {
+        function addTask(taskData) {
             const li = document.createElement('li');
-            // Añadimos la clase 'group' para manejar el hover en Tailwind CSS
-            li.className = 'group flex items-center justify-between p-3 bg-gray-200 rounded dark:bg-gray-700 dark:text-white transition-colors duration-300';
+            li.className = 'task group flex items-center justify-between p-3 bg-gray-200 rounded dark:bg-gray-700 dark:text-white transition-colors duration-300';
+            li.dataset.createdAt = taskData.createdAt || new Date().toISOString();
+
+            if (taskData.completed) {
+                li.classList.add('completed', 'line-through', 'opacity-50');
+            }
+
+            if (taskData.overdue) {
+                li.classList.add('overdue', 'bg-red-500', 'dark:bg-red-700');
+            }
+
             li.innerHTML = `
-                <span class="task-text text-lg">${taskText}</span>
+                <div class="flex items-center space-x-3">
+                    <input type="checkbox" class="complete-checkbox" ${taskData.completed ? 'checked' : ''}>
+                    <span class="task-text text-lg">${taskData.text}</span>
+                </div>
                 <div class="opacity-100 sm:opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-200 flex space-x-4">
-                    <button class="edit-button text-blue-500 hover:text-blue-600 focus:outline-none"><i class="fas fa-pencil-alt text-lg"></i></button>
-                    <button class="delete-button text-red-500 hover:text-red-600 focus:outline-none"><i class="fas fa-trash text-lg"></i></button>
+                    <button class="edit-button text-blue-500 hover:text-blue-600 focus:outline-none" title="Editar"><i class="fas fa-pencil-alt text-lg"></i></button>
+                    <button class="delete-button text-red-500 hover:text-red-600 focus:outline-none" title="Eliminar"><i class="fas fa-trash text-lg"></i></button>
                 </div>
             `;
-            document.getElementById('todoList').appendChild(li);
+            // **Cambio Importante: Usar prepend en lugar de appendChild**
+            document.getElementById('todoList').prepend(li);
+
+            // Evento para marcar como completada una tarea
+            li.querySelector('.complete-checkbox').addEventListener('change', function() {
+                if (this.checked) {
+                    li.classList.add('completed', 'line-through', 'opacity-50');
+                    addPoints(25);
+                } else {
+                    li.classList.remove('completed', 'line-through', 'opacity-50');
+                    // Opcional: Restar puntos si se desmarca una tarea completada
+                    subtractPoints(25);
+                }
+                saveState();
+            });
 
             // Evento para editar una tarea
             li.querySelector('.edit-button').addEventListener('click', function() {
@@ -158,6 +292,12 @@
                         saveState();
                     }
                 });
+
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        input.blur();
+                    }
+                });
             });
 
             // Evento para eliminar una tarea con confirmación
@@ -173,10 +313,6 @@
                     if (editButton) {
                         editButton.style.display = 'none';
                     }
-
-                    // Mantener el icono de la basura pero cambiar su color a negro
-                    const deleteIcon = li.querySelector('.delete-button i');
-                    // No cambiar el icono, mantener 'fa-trash'
 
                     // Cambiar el color del botón de eliminar a negro
                     const deleteButton = li.querySelector('.delete-button');
@@ -207,6 +343,11 @@
                     document.addEventListener('click', cancelDeletion);
                 } else {
                     // Confirmar y eliminar la tarea definitivamente
+                    // Si la tarea estaba completada, restar los puntos correspondientes
+                    if (li.classList.contains('completed')) {
+                        subtractPoints(25);
+                    }
+
                     li.remove();
                     saveState();
                 }
@@ -227,13 +368,89 @@
             const input = document.getElementById('todoInput');
             const taskText = input.value.trim();
             if (taskText) {
-                addTask(taskText);
+                addTask({ text: taskText });
                 input.value = '';
+            }
+        });
+
+        // Permitir añadir tarea presionando Enter
+        document.getElementById('todoInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('addButton').click();
             }
         });
 
         // Cargar el estado al cargar la página
         window.addEventListener('DOMContentLoaded', loadState);
+
+        // Función para verificar y manejar tareas atrasadas
+        function checkOverdueTasks() {
+            const tasks = document.querySelectorAll('.task');
+            const now = new Date();
+
+            tasks.forEach(task => {
+                if (!task.classList.contains('completed') && !task.classList.contains('overdue')) {
+                    const createdAt = new Date(task.dataset.createdAt);
+                    const diffInHours = (now - createdAt) / (1000 * 60 * 60);
+
+                    if (diffInHours >= 24) {
+                        task.classList.add('overdue', 'bg-red-500', 'dark:bg-red-700');
+                        subtractPoints(50);
+                        saveState();
+                    }
+                }
+            });
+        }
+
+        // Verificar tareas atrasadas al cargar y cada hora
+        window.addEventListener('DOMContentLoaded', function() {
+            checkOverdueTasks();
+            // Verificar cada hora
+            setInterval(checkOverdueTasks, 60 * 60 * 1000);
+        });
+
+        // Manejo del modal de puntos
+        document.getElementById('showPoints').addEventListener('click', function() {
+            document.getElementById('pointsModal').classList.remove('hidden');
+        });
+
+        document.getElementById('closePointsModal').addEventListener('click', function() {
+            document.getElementById('pointsModal').classList.add('hidden');
+        });
+
+        // Manejo del botón para reiniciar puntos
+        document.getElementById('resetPointsButton').addEventListener('click', function() {
+            // Abrir el modal de confirmación
+            document.getElementById('confirmResetModal').classList.remove('hidden');
+        });
+
+        // Manejo de la confirmación de reinicio de puntos
+        document.getElementById('confirmResetYes').addEventListener('click', function() {
+            resetPoints();
+            // Cerrar ambos modales
+            document.getElementById('confirmResetModal').classList.add('hidden');
+            document.getElementById('pointsModal').classList.add('hidden');
+            // Mostrar el modal de éxito
+            showSuccessModal('Tus puntos han sido reiniciados a 0.');
+        });
+
+        document.getElementById('confirmResetNo').addEventListener('click', function() {
+            // Cerrar el modal de confirmación
+            document.getElementById('confirmResetModal').classList.add('hidden');
+        });
+
+        // Función para mostrar un modal de éxito
+        function showSuccessModal(message) {
+            const successModal = document.getElementById('successModal');
+            const successMessage = document.getElementById('successMessage');
+            successMessage.textContent = message;
+            successModal.classList.remove('hidden');
+
+            // Evento para cerrar el modal de éxito
+            document.getElementById('closeSuccessModal').addEventListener('click', function() {
+                successModal.classList.add('hidden');
+            }, { once: true });
+        }
     </script>
 </body>
 </html>
