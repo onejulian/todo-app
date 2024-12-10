@@ -66,25 +66,25 @@
         <div class="flex justify-between items-center">
             <h1 class="text-3xl font-bold">Todo List App</h1>
             <button id="toggleMode" class="bg-gray-300 text-gray-900 p-2 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
-                <i id="modeIcon" class="fas fa-moon"></i>
+                <i id="modeIcon" class="fas fa-moon text-lg"></i>
             </button>
         </div>
     </header>
-    <main class="flex items-center justify-center flex-grow w-3/4">
+    <main class="flex items-center justify-center flex-grow w-full px-4 sm:px-6 lg:px-8">
         <div class="bg-gray-100 p-6 rounded-lg shadow-md w-full max-w-md dark:bg-gray-800 dark:text-white">
             <input 
                 type="text" 
                 id="todoInput" 
                 placeholder="Añadir una nueva tarea" 
-                class="w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white dark:bg-gray-700"
+                class="w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white dark:bg-gray-700 text-lg"
             >
             <button 
                 id="addButton" 
-                class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
             >
                 Añadir Tarea
             </button>
-            <ul id="todoList" class="mt-4 space-y-2 max-h-[300px] overflow-y-auto">
+            <ul id="todoList" class="mt-6 space-y-3 max-h-[300px] overflow-y-auto">
                 <!-- Las tareas se agregarán aquí -->
             </ul>
         </div>
@@ -95,9 +95,9 @@
         function updateModeIcon() {
             const icon = document.getElementById('modeIcon');
             if (document.documentElement.classList.contains('dark')) {
-                icon.className = 'fas fa-sun';
+                icon.className = 'fas fa-sun text-lg';
             } else {
-                icon.className = 'fas fa-moon';
+                icon.className = 'fas fa-moon text-lg';
             }
         }
 
@@ -124,12 +124,12 @@
         function addTask(taskText) {
             const li = document.createElement('li');
             // Añadimos la clase 'group' para manejar el hover en Tailwind CSS
-            li.className = 'group flex items-center justify-between p-2 bg-gray-200 rounded dark:bg-gray-700 dark:text-white transition-colors duration-300';
+            li.className = 'group flex items-center justify-between p-3 bg-gray-200 rounded dark:bg-gray-700 dark:text-white transition-colors duration-300';
             li.innerHTML = `
-                <span class="task-text">${taskText}</span>
+                <span class="task-text text-lg">${taskText}</span>
                 <div class="opacity-100 sm:opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-200 flex space-x-2">
-                    <button class="edit-button text-blue-500 hover:text-blue-600 focus:outline-none"><i class="fas fa-pencil-alt"></i></button>
-                    <button class="delete-button text-red-500 hover:text-red-600 focus:outline-none"><i class="fas fa-trash"></i></button>
+                    <button class="edit-button text-blue-500 hover:text-blue-600 focus:outline-none"><i class="fas fa-pencil-alt text-lg"></i></button>
+                    <button class="delete-button text-red-500 hover:text-red-600 focus:outline-none"><i class="fas fa-trash text-lg"></i></button>
                 </div>
             `;
             document.getElementById('todoList').appendChild(li);
@@ -140,7 +140,7 @@
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.value = span.textContent;
-                input.className = 'p-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white dark:bg-gray-700';
+                input.className = 'w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white dark:bg-gray-700 text-lg';
                 span.replaceWith(input);
                 input.focus();
 
@@ -148,7 +148,7 @@
                     const nuevoTexto = input.value.trim();
                     if (nuevoTexto) {
                         const newSpan = document.createElement('span');
-                        newSpan.className = 'task-text';
+                        newSpan.className = 'task-text text-lg';
                         newSpan.textContent = nuevoTexto;
                         input.replaceWith(newSpan);
                         saveState();
