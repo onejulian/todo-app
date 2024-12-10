@@ -307,14 +307,23 @@
                 li.classList.add('overdue', 'bg-red-500', 'dark:bg-red-700');
             }
 
+            // Condicionar la inclusión del botón de editar
+            const editButtonHTML = taskData.completed ? '' : `
+                <button class="edit-button text-blue-500 hover:text-blue-600 focus:outline-none" title="Editar">
+                    <i class="fas fa-pencil-alt text-lg"></i>
+                </button>
+            `;
+
             li.innerHTML = `
                 <div class="flex items-center space-x-3">
                     <input type="checkbox" class="complete-checkbox" ${taskData.completed ? 'checked' : ''}>
                     <span class="task-text text-lg">${taskData.text}</span>
                 </div>
                 <div class="opacity-100 sm:opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-200 flex space-x-4">
-                    <button class="edit-button text-blue-500 hover:text-blue-600 focus:outline-none" title="Editar"><i class="fas fa-pencil-alt text-lg"></i></button>
-                    <button class="delete-button text-red-500 hover:text-red-600 focus:outline-none" title="Eliminar"><i class="fas fa-trash text-lg"></i></button>
+                    ${editButtonHTML}
+                    <button class="delete-button text-red-500 hover:text-red-600 focus:outline-none" title="Eliminar">
+                        <i class="fas fa-trash text-lg"></i>
+                    </button>
                 </div>
             `;
             // Usar prepend para agregar la tarea al inicio
@@ -325,45 +334,92 @@
                 if (this.checked) {
                     li.classList.add('completed', 'line-through', 'opacity-50');
                     addPoints(25);
+                    // Eliminar el botón de editar
+                    const editButton = li.querySelector('.edit-button');
+                    if (editButton) {
+                        editButton.remove();
+                    }
                 } else {
                     li.classList.remove('completed', 'line-through', 'opacity-50');
                     // Opcional: Restar puntos si se desmarca una tarea completada
                     subtractPoints(25);
+                    // Reagregar el botón de editar
+                    const deleteButton = li.querySelector('.delete-button');
+                    const editButton = document.createElement('button');
+                    editButton.className = 'edit-button text-blue-500 hover:text-blue-600 focus:outline-none';
+                    editButton.title = 'Editar';
+                    editButton.innerHTML = '<i class="fas fa-pencil-alt text-lg"></i>';
+                    // Insertar el botón de editar antes del botón de eliminar
+                    li.querySelector('.opacity-100').insertBefore(editButton, deleteButton);
+                    
+                    // Añadir el evento para editar nuevamente
+                    editButton.addEventListener('click', function() {
+                        const span = li.querySelector('.task-text');
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.value = span.textContent;
+                        input.className = 'w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white dark:bg-gray-700 text-lg';
+                        span.replaceWith(input);
+                        input.focus();
+
+                        input.addEventListener('blur', function() {
+                            const nuevoTexto = input.value.trim();
+                            if (nuevoTexto) {
+                                const newSpan = document.createElement('span');
+                                newSpan.className = 'task-text text-lg';
+                                newSpan.textContent = nuevoTexto;
+                                input.replaceWith(newSpan);
+                                saveState();
+                            } else {
+                                // Si el texto está vacío, eliminar la tarea
+                                li.remove();
+                                saveState();
+                            }
+                        });
+
+                        input.addEventListener('keypress', function(e) {
+                            if (e.key === 'Enter') {
+                                input.blur();
+                            }
+                        });
+                    });
                 }
                 saveState();
             });
 
             // Evento para editar una tarea
-            li.querySelector('.edit-button').addEventListener('click', function() {
-                const span = li.querySelector('.task-text');
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.value = span.textContent;
-                input.className = 'w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white dark:bg-gray-700 text-lg';
-                span.replaceWith(input);
-                input.focus();
+            if (!taskData.completed) {
+                li.querySelector('.edit-button').addEventListener('click', function() {
+                    const span = li.querySelector('.task-text');
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.value = span.textContent;
+                    input.className = 'w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white dark:bg-gray-700 text-lg';
+                    span.replaceWith(input);
+                    input.focus();
 
-                input.addEventListener('blur', function() {
-                    const nuevoTexto = input.value.trim();
-                    if (nuevoTexto) {
-                        const newSpan = document.createElement('span');
-                        newSpan.className = 'task-text text-lg';
-                        newSpan.textContent = nuevoTexto;
-                        input.replaceWith(newSpan);
-                        saveState();
-                    } else {
-                        // Si el texto está vacío, eliminar la tarea
-                        li.remove();
-                        saveState();
-                    }
-                });
+                    input.addEventListener('blur', function() {
+                        const nuevoTexto = input.value.trim();
+                        if (nuevoTexto) {
+                            const newSpan = document.createElement('span');
+                            newSpan.className = 'task-text text-lg';
+                            newSpan.textContent = nuevoTexto;
+                            input.replaceWith(newSpan);
+                            saveState();
+                        } else {
+                            // Si el texto está vacío, eliminar la tarea
+                            li.remove();
+                            saveState();
+                        }
+                    });
 
-                input.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        input.blur();
-                    }
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            input.blur();
+                        }
+                    });
                 });
-            });
+            }
 
             // Evento para eliminar una tarea con confirmación
             li.querySelector('.delete-button').addEventListener('click', function(event) {
@@ -373,7 +429,7 @@
                     // Marcar la tarea para eliminación
                     li.classList.add('deleting', 'bg-red-500', 'dark:bg-red-700');
 
-                    // Ocultar el botón de editar
+                    // Ocultar el botón de editar si existe
                     const editButton = li.querySelector('.edit-button');
                     if (editButton) {
                         editButton.style.display = 'none';
@@ -390,8 +446,8 @@
                             // Cancelar la eliminación
                             li.classList.remove('deleting', 'bg-red-500', 'dark:bg-red-700');
 
-                            // Mostrar nuevamente el botón de editar
-                            if (editButton) {
+                            // Mostrar nuevamente el botón de editar si la tarea no está completada
+                            if (editButton && !li.classList.contains('completed')) {
                                 editButton.style.display = 'inline-block';
                             }
 
@@ -625,7 +681,6 @@
         document.getElementById('closeErrorImportModal').addEventListener('click', function() {
             document.getElementById('errorImportModal').classList.add('hidden');
         });
-
     </script>
 </body>
 </html>
