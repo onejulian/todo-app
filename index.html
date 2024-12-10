@@ -62,20 +62,39 @@
     </style>
 </head>
 <body class="bg-white text-gray-900 dark:bg-gray-900 dark:text-white flex flex-col items-center min-h-screen transition-colors duration-300">
-    <header class="bg-gray-200 w-full p-4 text-center dark:bg-gray-800 dark:text-white">
+    <header class="bg-gray-200 w-full p-4 dark:bg-gray-800 dark:text-white">
         <div class="flex justify-between items-center">
-            <!-- Botón de Puntos en lugar del Título -->
+            <!-- Botón de Puntos -->
             <button 
                 id="showPoints" 
-                class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 text-lg"
+                class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 text-lg flex items-center space-x-2"
                 title="Ver Puntos"
             >
-                Puntos: <span id="pointsDisplay">0</span>
+                <span>Puntos:</span>
+                <span id="pointsDisplay">0</span>
             </button>
-            <!-- Botón de Modo Claro/Oscuro -->
-            <button id="toggleMode" class="bg-gray-300 text-gray-900 p-2 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
-                <i id="modeIcon" class="fas fa-moon text-lg"></i>
-            </button>
+            <div class="flex items-center space-x-2">
+                <!-- Botón de Exportar -->
+                <button 
+                    id="exportButton" 
+                    class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    title="Exportar Tareas"
+                >
+                    <i class="fas fa-file-export"></i>
+                </button>
+                <!-- Botón de Importar -->
+                <button 
+                    id="importButton" 
+                    class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    title="Importar Tareas"
+                >
+                    <i class="fas fa-file-import"></i>
+                </button>
+                <!-- Botón de Modo Claro/Oscuro -->
+                <button id="toggleMode" class="bg-gray-300 text-gray-900 p-2 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                    <i id="modeIcon" class="fas fa-moon text-lg"></i>
+                </button>
+            </div>
         </div>
     </header>
     <main class="flex items-center justify-center flex-grow w-full px-4 sm:px-6 lg:px-8">
@@ -145,6 +164,51 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de Confirmación para Importar Tareas -->
+    <div id="confirmImportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 class="text-2xl font-bold mb-4">Confirmar Importación de Tareas</h2>
+            <p class="text-lg">¿Deseas reemplazar tus tareas actuales con las importadas? Esta acción no se puede deshacer.</p>
+            <div class="flex justify-end space-x-4 mt-6">
+                <button id="confirmImportYes" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Sí, Importar
+                </button>
+                <button id="confirmImportNo" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Error en la Importación -->
+    <div id="errorImportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 class="text-2xl font-bold mb-4">Error en la Importación</h2>
+            <p class="text-lg" id="errorImportMessage">Hubo un problema al importar las tareas. Asegúrate de que el archivo sea válido.</p>
+            <div class="flex justify-end space-x-4 mt-6">
+                <button id="closeErrorImportModal" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Éxito para Importar Tareas -->
+    <div id="importSuccessModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 class="text-2xl font-bold mb-4">Éxito</h2>
+            <p class="text-lg" id="importSuccessMessage">Tus tareas han sido importadas exitosamente.</p>
+            <div class="flex justify-end space-x-4 mt-6">
+                <button id="closeImportSuccessModal" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden File Input para Importar Tareas -->
+    <input type="file" id="importFileInput" accept=".json" class="hidden">
 
     <script>
         // Inicialización de variables de puntos
@@ -253,7 +317,7 @@
                     <button class="delete-button text-red-500 hover:text-red-600 focus:outline-none" title="Eliminar"><i class="fas fa-trash text-lg"></i></button>
                 </div>
             `;
-            // **Cambio Importante: Usar prepend en lugar de appendChild**
+            // Usar prepend para agregar la tarea al inicio
             document.getElementById('todoList').prepend(li);
 
             // Evento para marcar como completada una tarea
@@ -452,6 +516,116 @@
                 successModal.classList.add('hidden');
             }, { once: true });
         }
+
+        // Funciones para Exportar e Importar Tareas
+
+        // Función para exportar tareas a un archivo JSON
+        function exportTasks() {
+            const tasks = Array.from(document.querySelectorAll('.task')).map(task => ({
+                text: task.querySelector('.task-text').textContent,
+                createdAt: task.dataset.createdAt,
+                completed: task.classList.contains('completed'),
+                overdue: task.classList.contains('overdue')
+            }));
+            const dataStr = JSON.stringify(tasks, null, 2);
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'tasks.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Función para importar tareas desde un archivo JSON
+        function importTasks(fileContent) {
+            try {
+                const importedTasks = JSON.parse(fileContent);
+                if (!Array.isArray(importedTasks)) {
+                    throw new Error('El archivo JSON no es válido.');
+                }
+
+                // Validar la estructura de cada tarea
+                importedTasks.forEach(task => {
+                    if (typeof task.text !== 'string' || typeof task.createdAt !== 'string' ||
+                        typeof task.completed !== 'boolean' || typeof task.overdue !== 'boolean') {
+                        throw new Error('El archivo JSON tiene una estructura inválida.');
+                    }
+                });
+
+                // Mostrar el modal de confirmación para reemplazar tareas
+                document.getElementById('confirmImportModal').classList.remove('hidden');
+
+                // Al confirmar la importación
+                document.getElementById('confirmImportYes').addEventListener('click', function() {
+                    // Reemplazar las tareas actuales
+                    document.getElementById('todoList').innerHTML = '';
+                    // Invertir para mantener el orden de las tareas (nuevas arriba)
+                    importedTasks.slice().reverse().forEach(task => addTask(task));
+                    saveState();
+
+                    // Cerrar los modales
+                    document.getElementById('confirmImportModal').classList.add('hidden');
+                    showImportSuccessModal('Tus tareas han sido importadas exitosamente.');
+                }, { once: true });
+
+                // Al cancelar la importación
+                document.getElementById('confirmImportNo').addEventListener('click', function() {
+                    document.getElementById('confirmImportModal').classList.add('hidden');
+                }, { once: true });
+
+            } catch (error) {
+                // Mostrar el modal de error
+                document.getElementById('errorImportMessage').textContent = error.message;
+                document.getElementById('errorImportModal').classList.remove('hidden');
+            }
+        }
+
+        // Evento para el botón de exportar
+        document.getElementById('exportButton').addEventListener('click', function() {
+            exportTasks();
+        });
+
+        // Evento para el botón de importar
+        document.getElementById('importButton').addEventListener('click', function() {
+            document.getElementById('importFileInput').click();
+        });
+
+        // Evento para manejar la selección de archivo para importar
+        document.getElementById('importFileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const content = e.target.result;
+                    importTasks(content);
+                };
+                reader.readAsText(file);
+            }
+            // Reiniciar el input para permitir importar el mismo archivo nuevamente si es necesario
+            event.target.value = '';
+        });
+
+        // Función para mostrar un modal de éxito al importar tareas
+        function showImportSuccessModal(message) {
+            const importSuccessModal = document.getElementById('importSuccessModal');
+            const importSuccessMessage = document.getElementById('importSuccessMessage');
+            importSuccessMessage.textContent = message;
+            importSuccessModal.classList.remove('hidden');
+
+            // Evento para cerrar el modal de éxito de importación
+            document.getElementById('closeImportSuccessModal').addEventListener('click', function() {
+                importSuccessModal.classList.add('hidden');
+            }, { once: true });
+        }
+
+        // Manejo del modal de error en la importación
+        document.getElementById('closeErrorImportModal').addEventListener('click', function() {
+            document.getElementById('errorImportModal').classList.add('hidden');
+        });
+
     </script>
 </body>
 </html>
