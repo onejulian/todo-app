@@ -15,7 +15,7 @@
                 } else if (mode === 'light') {
                     document.documentElement.classList.remove('dark');
                 }
-                // Si no hay modo almacenado, puedes optar por detectar el modo del sistema
+                // Opcional: Detectar el modo del sistema si no hay modo almacenado
                 // else {
                 //     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 //         document.documentElement.classList.add('dark');
@@ -127,7 +127,7 @@
             li.className = 'group flex items-center justify-between p-3 bg-gray-200 rounded dark:bg-gray-700 dark:text-white transition-colors duration-300';
             li.innerHTML = `
                 <span class="task-text text-lg">${taskText}</span>
-                <div class="opacity-100 sm:opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-200 flex space-x-2">
+                <div class="opacity-100 sm:opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-200 flex space-x-4">
                     <button class="edit-button text-blue-500 hover:text-blue-600 focus:outline-none"><i class="fas fa-pencil-alt text-lg"></i></button>
                     <button class="delete-button text-red-500 hover:text-red-600 focus:outline-none"><i class="fas fa-trash text-lg"></i></button>
                 </div>
