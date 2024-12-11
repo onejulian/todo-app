@@ -29,7 +29,9 @@ const Nav = (function() {
         });
 
         toggleModeMobile.addEventListener('click', () => {
+            // Cerrar el menú móvil y permitir que Theme.js maneje el cambio de tema
             closeMobileMenuFunc();
+            // No hacemos nada más aquí, ya que Theme.js maneja el cambio de tema
         });
     }
 

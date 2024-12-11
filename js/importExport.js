@@ -3,14 +3,35 @@
 const ImportExport = (function(Storage, Tasks, Points, Modal) {
     const exportButton = document.getElementById('exportButton');
     const importButton = document.getElementById('importButton');
+    const exportButtonMobile = document.getElementById('exportButtonMobile');
+    const importButtonMobile = document.getElementById('importButtonMobile');
     const importFileInput = document.getElementById('importFileInput');
 
     function init() {
-        exportButton.addEventListener('click', exportData);
-        importButton.addEventListener('click', () => {
-            importFileInput.click();
-        });
-        importFileInput.addEventListener('change', handleImport);
+        // Asignar eventos a los botones de escritorio
+        if (exportButton) {
+            exportButton.addEventListener('click', exportData);
+        }
+        if (importButton) {
+            importButton.addEventListener('click', () => {
+                importFileInput.click();
+            });
+        }
+
+        // Asignar eventos a los botones móviles
+        if (exportButtonMobile) {
+            exportButtonMobile.addEventListener('click', exportData);
+        }
+        if (importButtonMobile) {
+            importButtonMobile.addEventListener('click', () => {
+                importFileInput.click();
+            });
+        }
+
+        // Evento para manejar la importación
+        if (importFileInput) {
+            importFileInput.addEventListener('change', handleImport);
+        }
     }
 
     // Función para exportar puntos y tareas a un archivo JSON
