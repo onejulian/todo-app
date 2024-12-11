@@ -15,8 +15,10 @@ const I18n = (function (Storage) {
         let navLang = navigator.language || navigator.userLanguage;
         navLang = navLang.toLowerCase();
         if (navLang.indexOf('es') > -1) {
+            Storage.saveLanguage('es')
             return 'es';
         } else if (navLang.indexOf('en') > -1) {
+            Storage.saveLanguage('en')
             return 'en';
         } else {
             return 'en'; // Inglés por defecto si no es español ni inglés
