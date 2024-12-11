@@ -205,6 +205,8 @@ const Tasks = (function(Storage, Points, Modal) {
                 saveTasks();
             }
         });
+
+        saveTasks();
     }
 
     function saveTasks() {

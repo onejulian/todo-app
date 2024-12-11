@@ -28,6 +28,16 @@ const Points = (function(Storage) {
         Storage.savePoints(points);
     }
 
+    function setPoints(newPoints) {
+        points = Math.max(0, parseInt(newPoints, 10)) || 0;
+        updatePointsDisplay();
+        Storage.savePoints(points);
+    }
+
+    function getPoints() { // Método getter para puntos
+        return points;
+    }
+
     function loadPoints() {
         points = Storage.loadPoints();
     }
@@ -41,6 +51,8 @@ const Points = (function(Storage) {
         init,
         addPoints,
         subtractPoints,
-        resetPoints
+        resetPoints,
+        setPoints, // Exponer la nueva función
+        getPoints   // Exponer el método getter
     };
 })(Storage);
