@@ -1,6 +1,6 @@
 # todo-app
 
-visit the [website](todo.juliandavid.co)
+visit the [website](https://todo.juliandavid.co)
 
 ## Features:
 
