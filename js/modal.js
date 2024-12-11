@@ -3,12 +3,7 @@
 const Modal = (function () {
     const pointsModal = document.getElementById('pointsModal');
     const closePointsModalBtn = document.getElementById('closePointsModal');
-    const resetPointsButton = document.getElementById('resetPointsButton');
-    const confirmResetModal = document.getElementById('confirmResetModal');
-    const confirmResetYes = document.getElementById('confirmResetYes');
-    const confirmResetNo = document.getElementById('confirmResetNo');
     const successModal = document.getElementById('successModal');
-    const closeSuccessModalBtn = document.getElementById('closeSuccessModal');
     const confirmImportModal = document.getElementById('confirmImportModal');
     const confirmImportYes = document.getElementById('confirmImportYes');
     const confirmImportNo = document.getElementById('confirmImportNo');
@@ -34,29 +29,6 @@ const Modal = (function () {
         // Cerrar Modal de Puntos
         closePointsModalBtn.addEventListener('click', () => {
             pointsModal.classList.add('hidden');
-        });
-
-        // Reiniciar Puntos - Abrir Confirmación
-        resetPointsButton.addEventListener('click', () => {
-            showConfirmResetModal();
-        });
-
-        // Confirmar Reinicio de Puntos
-        confirmResetYes.addEventListener('click', () => {
-            Points.resetPoints();
-            hideConfirmResetModal();
-            hidePointsModal();
-            showSuccessModal('Tus puntos han sido reiniciados a 0.');
-        });
-
-        // Cancelar Reinicio de Puntos
-        confirmResetNo.addEventListener('click', () => {
-            hideConfirmResetModal();
-        });
-
-        // Cerrar Modal de Éxito
-        closeSuccessModalBtn.addEventListener('click', () => {
-            hideSuccessModal();
         });
 
         // Cerrar Modal de Error en Importación
