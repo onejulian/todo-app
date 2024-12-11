@@ -1,6 +1,6 @@
 // js/importExport.js
 
-const ImportExport = (function(Storage, Tasks, Points, Modal) {
+const ImportExport = (function (Storage, Tasks, Points, Modal) {
     const exportButton = document.getElementById('exportButton');
     const importButton = document.getElementById('importButton');
     const exportButtonMobile = document.getElementById('exportButtonMobile');
@@ -64,7 +64,7 @@ const ImportExport = (function(Storage, Tasks, Points, Modal) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 const content = e.target.result;
                 importData(content);
             };
@@ -78,23 +78,23 @@ const ImportExport = (function(Storage, Tasks, Points, Modal) {
         try {
             const importedData = JSON.parse(fileContent);
             if (typeof importedData !== 'object' || !importedData) {
-                throw new Error('El archivo JSON no es válido.');
+                throw new Error('errorImportMessage');
             }
 
             // Validar puntos
             if (typeof importedData.points !== 'number' || importedData.points < 0) {
-                throw new Error('La cantidad de puntos en el archivo JSON es inválida.');
+                throw new Error('errorImportMessage');
             }
 
             // Validar tareas
             if (!Array.isArray(importedData.tasks)) {
-                throw new Error('El archivo JSON no contiene una lista válida de tareas.');
+                throw new Error('errorImportMessage');
             }
 
             importedData.tasks.forEach(task => {
                 if (typeof task.text !== 'string' || typeof task.createdAt !== 'string' ||
                     typeof task.completed !== 'boolean' || typeof task.overdue !== 'boolean') {
-                    throw new Error('Una o más tareas en el archivo JSON tienen una estructura inválida.');
+                    throw new Error('errorImportMessage');
                 }
             });
 
@@ -102,7 +102,7 @@ const ImportExport = (function(Storage, Tasks, Points, Modal) {
             Modal.showConfirmImportModal();
 
             // Al confirmar la importación
-            document.getElementById('confirmImportYes').addEventListener('click', function() {
+            document.getElementById('confirmImportYes').addEventListener('click', function () {
                 // Reemplazar las tareas actuales
                 document.getElementById('todoList').innerHTML = '';
                 // Añadir las tareas importadas
@@ -112,11 +112,11 @@ const ImportExport = (function(Storage, Tasks, Points, Modal) {
 
                 // Cerrar los modales
                 Modal.hideConfirmImportModal();
-                Modal.showImportSuccessModal('Tus puntos y tareas han sido importados exitosamente.');
+                Modal.showImportSuccessModal('importSuccessMessage');
             }, { once: true });
 
             // Al cancelar la importación
-            document.getElementById('confirmImportNo').addEventListener('click', function() {
+            document.getElementById('confirmImportNo').addEventListener('click', function () {
                 Modal.hideConfirmImportModal();
             }, { once: true });
 

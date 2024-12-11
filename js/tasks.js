@@ -1,13 +1,13 @@
 // js/tasks.js
 
-const Tasks = (function(Storage, Points, Modal) {
+const Tasks = (function (Storage, Points, Modal) {
     const todoList = document.getElementById('todoList');
     const addButton = document.getElementById('addButton');
     const todoInput = document.getElementById('todoInput');
 
     function init() {
         addButton.addEventListener('click', handleAddTask);
-        todoInput.addEventListener('keypress', function(e) {
+        todoInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 handleAddTask();
             }
@@ -62,7 +62,7 @@ const Tasks = (function(Storage, Points, Modal) {
         todoList.prepend(li);
 
         // Evento para marcar como completada una tarea
-        li.querySelector('.complete-checkbox').addEventListener('change', function() {
+        li.querySelector('.complete-checkbox').addEventListener('change', function () {
             if (this.checked) {
                 li.classList.add('completed', 'line-through', 'opacity-50');
                 Points.addPoints(25);
@@ -83,9 +83,9 @@ const Tasks = (function(Storage, Points, Modal) {
                 editButton.innerHTML = '<i class="fas fa-pencil-alt text-lg"></i>';
                 // Insertar el botón de editar antes del botón de eliminar
                 li.querySelector('.opacity-100').insertBefore(editButton, deleteButton);
-                
+
                 // Añadir el evento para editar nuevamente
-                editButton.addEventListener('click', function() {
+                editButton.addEventListener('click', function () {
                     const span = li.querySelector('.task-text');
                     const input = document.createElement('input');
                     input.type = 'text';
@@ -94,7 +94,7 @@ const Tasks = (function(Storage, Points, Modal) {
                     span.replaceWith(input);
                     input.focus();
 
-                    input.addEventListener('blur', function() {
+                    input.addEventListener('blur', function () {
                         const nuevoTexto = input.value.trim();
                         if (nuevoTexto) {
                             const newSpan = document.createElement('span');
@@ -109,7 +109,7 @@ const Tasks = (function(Storage, Points, Modal) {
                         }
                     });
 
-                    input.addEventListener('keypress', function(e) {
+                    input.addEventListener('keypress', function (e) {
                         if (e.key === 'Enter') {
                             input.blur();
                         }
@@ -121,7 +121,7 @@ const Tasks = (function(Storage, Points, Modal) {
 
         // Evento para editar una tarea
         if (!taskData.completed) {
-            li.querySelector('.edit-button').addEventListener('click', function() {
+            li.querySelector('.edit-button').addEventListener('click', function () {
                 const span = li.querySelector('.task-text');
                 const input = document.createElement('input');
                 input.type = 'text';
@@ -130,7 +130,7 @@ const Tasks = (function(Storage, Points, Modal) {
                 span.replaceWith(input);
                 input.focus();
 
-                input.addEventListener('blur', function() {
+                input.addEventListener('blur', function () {
                     const nuevoTexto = input.value.trim();
                     if (nuevoTexto) {
                         const newSpan = document.createElement('span');
@@ -145,7 +145,7 @@ const Tasks = (function(Storage, Points, Modal) {
                     }
                 });
 
-                input.addEventListener('keypress', function(e) {
+                input.addEventListener('keypress', function (e) {
                     if (e.key === 'Enter') {
                         input.blur();
                     }
@@ -154,7 +154,7 @@ const Tasks = (function(Storage, Points, Modal) {
         }
 
         // Evento para eliminar una tarea con confirmación
-        li.querySelector('.delete-button').addEventListener('click', function(event) {
+        li.querySelector('.delete-button').addEventListener('click', function (event) {
             event.stopPropagation(); // Evita que el click propague al documento
 
             if (!li.classList.contains('deleting')) {
@@ -173,7 +173,7 @@ const Tasks = (function(Storage, Points, Modal) {
                 deleteButton.classList.add('text-black', 'hover:text-gray-700');
 
                 // Agregar una referencia al listener para poder eliminarlo después
-                const cancelDeletion = function(e) {
+                const cancelDeletion = function (e) {
                     if (!li.contains(e.target)) {
                         // Cancelar la eliminación
                         li.classList.remove('deleting', 'bg-red-500', 'dark:bg-red-700');

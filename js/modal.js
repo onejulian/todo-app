@@ -1,6 +1,6 @@
 // js/modal.js
 
-const Modal = (function() {
+const Modal = (function () {
     const pointsModal = document.getElementById('pointsModal');
     const closePointsModalBtn = document.getElementById('closePointsModal');
     const resetPointsButton = document.getElementById('resetPointsButton');
@@ -92,9 +92,9 @@ const Modal = (function() {
         confirmImportModal.classList.add('hidden');
     }
 
-    function showErrorImportModal(message) {
+    function showErrorImportModal(translationKey) {
         const errorImportMessage = document.getElementById('errorImportMessage');
-        errorImportMessage.textContent = message;
+        errorImportMessage.setAttribute('data-i18n', translationKey);
         errorImportModal.classList.remove('hidden');
     }
 
@@ -102,9 +102,9 @@ const Modal = (function() {
         errorImportModal.classList.add('hidden');
     }
 
-    function showImportSuccessModal(message) {
+    function showImportSuccessModal(translationKey) {
         const importSuccessMessage = document.getElementById('importSuccessMessage');
-        importSuccessMessage.textContent = message;
+        importSuccessMessage.setAttribute('data-i18n', translationKey);
         importSuccessModal.classList.remove('hidden');
     }
 

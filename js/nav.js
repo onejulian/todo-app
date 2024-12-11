@@ -1,6 +1,6 @@
 // js/nav.js
 
-const Nav = (function() {
+const Nav = (function () {
     const hamburgerButton = document.getElementById('hamburgerButton');
     const mobileMenu = document.getElementById('mobileMenu');
     const overlay = document.getElementById('overlay');
@@ -32,6 +32,12 @@ const Nav = (function() {
             // Cerrar el menú móvil y permitir que Theme.js maneje el cambio de tema
             closeMobileMenuFunc();
             // No hacemos nada más aquí, ya que Theme.js maneja el cambio de tema
+        });
+
+        languageButtonMobile.addEventListener('click', () => {
+            // Abrir el modal de idioma y cerrar el menú
+            closeMobileMenuFunc(); // Llama a la función para cerrar el menú
+            I18n.showLanguageModal()
         });
     }
 

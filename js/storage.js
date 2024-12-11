@@ -1,9 +1,10 @@
 // js/storage.js
 
-const Storage = (function() {
+const Storage = (function () {
     const POINTS_KEY = 'points';
     const TASKS_KEY = 'tasks';
     const MODE_KEY = 'mode';
+    const LANGUAGE_KEY = 'language';
 
     function savePoints(points) {
         localStorage.setItem(POINTS_KEY, points);
@@ -31,12 +32,22 @@ const Storage = (function() {
         return localStorage.getItem(MODE_KEY);
     }
 
+    function saveLanguage(lang) {
+        localStorage.setItem(LANGUAGE_KEY, lang);
+    }
+
+    function getLanguage() {
+        return localStorage.getItem(LANGUAGE_KEY) || ''; // Devuelve una cadena vacía en lugar de null
+    }
+
     return {
         savePoints,
         loadPoints,
         saveTasks,
         loadTasks,
         saveMode,
-        loadMode
+        loadMode,
+        saveLanguage,
+        getLanguage
     };
 })();

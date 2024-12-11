@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo List App con Sistema de Puntos</title>
-    
+
     <!-- Script inline para aplicar la clase 'dark' antes de cargar Tailwind CSS -->
     <script>
-        (function() {
+        (function () {
             try {
                 const mode = localStorage.getItem('mode');
                 if (mode === 'dark') {
@@ -41,13 +42,13 @@
             },
         }
     </script>
-    
+
     <!-- Cargar Font Awesome -->
     <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
-    
+
     <!-- Cargar estilos personalizados -->
     <link rel="stylesheet" href="styles.css">
-    
+
     <!-- Estilos personalizados adicionales (si los hay) -->
     <style>
         /* Ocultar la barra de desplazamiento en navegadores WebKit */
@@ -57,7 +58,8 @@
 
         /* Ocultar la barra de desplazamiento en Firefox */
         #todoList {
-            scrollbar-width: none; /* Firefox */
+            scrollbar-width: none;
+            /* Firefox */
         }
 
         /* Transición suave para cambios de color */
@@ -66,113 +68,95 @@
         }
     </style>
 </head>
-<body class="bg-white text-gray-900 dark:bg-gray-900 dark:text-white flex flex-col items-center min-h-screen transition-colors duration-300">
+
+<body
+    class="bg-white text-gray-900 dark:bg-gray-900 dark:text-white flex flex-col items-center min-h-screen transition-colors duration-300">
     <header class="bg-gray-200 w-full p-4 dark:bg-gray-800 dark:text-white">
         <div class="flex justify-between items-center">
             <!-- Botón de Puntos -->
-            <button 
-                id="showPoints" 
+            <button id="showPoints"
                 class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 text-lg flex items-center space-x-2"
-                title="Ver Puntos"
-            >
-                <span>Puntos:</span>
+                title="Ver Puntos" data-i18n-title="viewPoints">
+                <span data-i18n="points">Puntos:</span>
                 <span id="pointsDisplay">0</span>
             </button>
             <!-- Botón de Hamburguesa (Visible en Pantallas Pequeñas) -->
-            <button 
-                id="hamburgerButton" 
-                class="text-gray-900 dark:text-white focus:outline-none lg:hidden" 
-                aria-label="Menu" 
-                title="Abrir menú"
-            >
+            <button id="hamburgerButton" class="text-gray-900 dark:text-white focus:outline-none lg:hidden"
+                aria-label="Menu" title="Abrir menú">
                 <i class="fas fa-bars text-2xl"></i>
             </button>
             <!-- Contenedor de Opciones del Header (Visible en Pantallas Grandes) -->
-            <div 
-                id="headerOptions" 
-                class="hidden lg:flex items-center space-x-2"
-            >
+            <div id="headerOptions" class="hidden lg:flex items-center space-x-2">
                 <!-- Botón de Exportar -->
-                <button 
-                    id="exportButton" 
+                <button id="exportButton"
                     class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    title="Exportar Tareas"
-                >
+                    title="Exportar Tareas" data-i18n-title="export">
                     <i class="fas fa-file-export"></i>
                 </button>
                 <!-- Botón de Importar -->
-                <button 
-                    id="importButton" 
+                <button id="importButton"
                     class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    title="Importar Tareas"
-                >
+                    title="Importar Tareas" data-i18n-title="import">
                     <i class="fas fa-file-import"></i>
                 </button>
                 <!-- Botón de Modo Claro/Oscuro -->
-                <button 
-                    id="toggleMode" 
+                <button id="toggleMode"
                     class="bg-gray-300 text-gray-900 p-2 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                    title="Cambiar modo oscuro o claro"
-                >
+                    title="Cambiar modo oscuro o claro" data-i18n-title="changeTheme">
                     <i id="modeIcon" class="fas fa-moon text-lg"></i>
+                </button>
+                <!-- Botón de Idioma -->
+                <button id="languageButton"
+                    class="bg-gray-300 text-gray-900 p-2 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    title="Seleccionar Idioma" data-i18n-title="selectLanguage">
+                    <i class="fas fa-globe text-lg"></i>
                 </button>
             </div>
         </div>
         <!-- Menú Desplegable para Pantallas Pequeñas como Panel Lateral -->
-        <div 
-            id="mobileMenu" 
-            class="hidden lg:hidden flex flex-col space-y-2"
-        >
+        <div id="mobileMenu" class="hidden lg:hidden flex flex-col space-y-2">
             <!-- Botón de Cierre del Menú Móvil -->
-            <button 
-                id="closeMobileMenu" 
-                class="self-end focus:outline-none" 
-                aria-label="Cerrar menú" 
-                title="Cerrar menú"
-            >
+            <button id="closeMobileMenu" class="self-end focus:outline-none" aria-label="Cerrar menú"
+                title="Cerrar menú">
                 <i class="fas fa-times text-2xl"></i>
             </button>
             <!-- Botones dentro del Menú Móvil -->
-            <button 
-                id="exportButtonMobile" 
+            <button id="exportButtonMobile"
                 class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center space-x-2"
-                title="Exportar Tareas"
-            >
+                title="Exportar Tareas" data-i18n-title="export">
                 <i class="fas fa-file-export"></i>
-                <span>Exportar</span>
+                <span data-i18n="export">Exportar</span>
             </button>
-            <button 
-                id="importButtonMobile" 
+            <button id="importButtonMobile"
                 class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center space-x-2"
-                title="Importar Tareas"
-            >
+                title="Importar Tareas" data-i18n-title="import">
                 <i class="fas fa-file-import"></i>
-                <span>Importar</span>
+                <span data-i18n="import">Importar</span>
             </button>
-            <button 
-                id="toggleModeMobile" 
+            <button id="toggleModeMobile"
                 class="bg-gray-300 text-gray-900 p-2 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white flex items-center space-x-2"
-                title="Cambiar modo oscuro o claro"
-            >
+                title="Cambiar modo oscuro o claro" data-i18n-title="changeTheme">
                 <i id="modeIconMobile" class="fas fa-moon text-lg"></i>
-                <span>Cambiar Tema</span>
+                <span data-i18n="changeTheme">Cambiar Tema</span>
+            </button>
+            <!-- Botón de Idioma (Móvil) -->
+            <button id="languageButtonMobile"
+                class="bg-gray-300 text-gray-900 p-2 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white flex items-center space-x-2"
+                title="Seleccionar Idioma" data-i18n-title="selectLanguage">
+                <i class="fas fa-globe text-lg"></i>
+                <span data-i18n="selectLanguage">Seleccionar Idioma</span>
             </button>
         </div>
     </header>
     <main class="flex items-center justify-center flex-grow w-full px-4 sm:px-6 lg:px-8">
         <div class="bg-gray-100 p-6 rounded-lg shadow-md w-full max-w-md dark:bg-gray-800 dark:text-white">
             <div class="flex justify-between items-center mb-4">
-                <input 
-                    type="text" 
-                    id="todoInput" 
-                    placeholder="Añadir una nueva tarea" 
+                <input type="text" id="todoInput" placeholder="Añadir una nueva tarea"
                     class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white dark:bg-gray-700 text-lg"
-                >
-                <button 
-                    id="addButton" 
+                    data-i18n-placeholder="addTaskPlaceholder">
+                <button id="addButton"
                     class="ml-2 bg-blue-500 text-white p-3 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
-                    title="Añadir Tarea"
-                >
+                    title="Añadir Tarea" data-i18n-title="addTaskTitle">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
@@ -188,13 +172,18 @@
     <!-- Modal para mostrar puntos detallados -->
     <div id="pointsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
-            <h2 class="text-2xl font-bold mb-4">Tus Puntos</h2>
-            <p class="text-lg">Puntos actuales: <span id="pointsModalDisplay">0</span></p>
+            <h2 class="text-2xl font-bold mb-4" data-i18n="points">Tus Puntos</h2>
+            <p class="text-lg"><span data-i18n="points">Puntos actuales</span>: <span id="pointsModalDisplay">0</span>
+            </p>
             <div class="flex justify-end space-x-4 mt-6">
-                <button id="resetPointsButton" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                <button id="resetPointsButton"
+                    class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    data-i18n="resetPoints">
                     Reiniciar Puntos
                 </button>
-                <button id="closePointsModal" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="closePointsModal"
+                    class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    data-i18n="close">
                     Cerrar
                 </button>
             </div>
@@ -204,13 +193,18 @@
     <!-- Modal de Confirmación para Reiniciar Puntos -->
     <div id="confirmResetModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
-            <h2 class="text-2xl font-bold mb-4">Confirmar Reinicio de Puntos</h2>
-            <p class="text-lg">¿Estás seguro de que deseas reiniciar tus puntos a 0? Esta acción no se puede deshacer.</p>
+            <h2 class="text-2xl font-bold mb-4" data-i18n="confirmResetTitle">Confirmar Reinicio de Puntos</h2>
+            <p class="text-lg" data-i18n="confirmResetMessage">¿Estás seguro de que deseas reiniciar tus puntos a 0?
+                Esta acción no se puede deshacer.</p>
             <div class="flex justify-end space-x-4 mt-6">
-                <button id="confirmResetYes" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                <button id="confirmResetYes"
+                    class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    data-i18n="confirmResetYes">
                     Sí, Reiniciar
                 </button>
-                <button id="confirmResetNo" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                <button id="confirmResetNo"
+                    class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    data-i18n="confirmResetNo">
                     Cancelar
                 </button>
             </div>
@@ -220,10 +214,13 @@
     <!-- Modal de Éxito (Opcional) -->
     <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
-            <h2 class="text-2xl font-bold mb-4">Éxito</h2>
-            <p class="text-lg" id="successMessage">Tus puntos han sido reiniciados a 0.</p>
+            <h2 class="text-2xl font-bold mb-4" data-i18n="successTitle">Éxito</h2>
+            <p class="text-lg" id="successMessage" data-i18n="successMessagePointsReset">Tus puntos han sido reiniciados
+                a 0.</p>
             <div class="flex justify-end space-x-4 mt-6">
-                <button id="closeSuccessModal" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="closeSuccessModal"
+                    class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    data-i18n="close">
                     Cerrar
                 </button>
             </div>
@@ -233,13 +230,18 @@
     <!-- Modal de Confirmación para Importar Tareas -->
     <div id="confirmImportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
-            <h2 class="text-2xl font-bold mb-4">Confirmar Importación de Tareas</h2>
-            <p class="text-lg">¿Deseas reemplazar tus tareas y puntos actuales con los importados? Esta acción no se puede deshacer.</p>
+            <h2 class="text-2xl font-bold mb-4" data-i18n="confirmImportTitle">Confirmar Importación de Tareas</h2>
+            <p class="text-lg" data-i18n="confirmImportMessage">¿Deseas reemplazar tus tareas y puntos actuales con los
+                importados? Esta acción no se puede deshacer.</p>
             <div class="flex justify-end space-x-4 mt-6">
-                <button id="confirmImportYes" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="confirmImportYes"
+                    class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    data-i18n="confirmImportYes">
                     Sí, Importar
                 </button>
-                <button id="confirmImportNo" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                <button id="confirmImportNo"
+                    class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    data-i18n="confirmImportNo">
                     Cancelar
                 </button>
             </div>
@@ -249,10 +251,13 @@
     <!-- Modal de Error en la Importación -->
     <div id="errorImportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
-            <h2 class="text-2xl font-bold mb-4">Error en la Importación</h2>
-            <p class="text-lg" id="errorImportMessage">Hubo un problema al importar las tareas. Asegúrate de que el archivo sea válido.</p>
+            <h2 class="text-2xl font-bold mb-4" data-i18n="errorImportTitle">Error en la Importación</h2>
+            <p class="text-lg" id="errorImportMessage" data-i18n="errorImportMessage">Hubo un problema al importar las
+                tareas. Asegúrate de que el archivo sea válido.</p>
             <div class="flex justify-end space-x-4 mt-6">
-                <button id="closeErrorImportModal" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="closeErrorImportModal"
+                    class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    data-i18n="close">
                     Cerrar
                 </button>
             </div>
@@ -262,10 +267,39 @@
     <!-- Modal de Éxito para Importar Tareas -->
     <div id="importSuccessModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
-            <h2 class="text-2xl font-bold mb-4">Éxito</h2>
-            <p class="text-lg" id="importSuccessMessage">Tus puntos y tareas han sido importados exitosamente.</p>
+            <h2 class="text-2xl font-bold mb-4" data-i18n="importSuccessTitle">Éxito</h2>
+            <p class="text-lg" id="importSuccessMessage" data-i18n="importSuccessMessage">Tus puntos y tareas han sido
+                importados exitosamente.</p>
             <div class="flex justify-end space-x-4 mt-6">
-                <button id="closeImportSuccessModal" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="closeImportSuccessModal"
+                    class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    data-i18n="close">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Selección de Idioma -->
+    <div id="languageModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 class="text-2xl font-bold mb-4" data-i18n="languageSelectionTitle">Seleccionar Idioma</h2>
+            <div class="space-y-4">
+                <button id="selectEnglish"
+                    class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                    data-i18n="languageEnglish">
+                    Inglés
+                </button>
+                <button id="selectSpanish"
+                    class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                    data-i18n="languageSpanish">
+                    Español
+                </button>
+            </div>
+            <div class="flex justify-end mt-6">
+                <button id="closeLanguageModal"
+                    class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    data-i18n="close">
                     Cerrar
                 </button>
             </div>
@@ -283,6 +317,8 @@
     <script src="js/tasks.js"></script>
     <script src="js/importExport.js"></script>
     <script src="js/nav.js"></script> <!-- Nuevo Archivo -->
+    <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>
 </body>
+
 </html>
