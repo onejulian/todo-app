@@ -1,7 +1,7 @@
 {
     "points": "Points",
-    "export": "Export",
-    "import": "Import",
+    "export": "Export tasks",
+    "import": "Import tasks",
     "changeTheme": "Change Theme",
     "selectLanguage": "Select Language",
     "addTaskPlaceholder": "Add a new task",
@@ -25,5 +25,6 @@
     "importSuccessMessage": "Your points and tasks have been successfully imported.",
     "languageSelectionTitle": "Select Language",
     "languageEnglish": "English",
-    "languageSpanish": "Spanish"
+    "languageSpanish": "Spanish",
+    "todoAppTitle" : "To do App"
 }

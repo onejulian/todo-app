@@ -1,7 +1,7 @@
 {
     "points": "Puntos",
-    "export": "Exportar",
-    "import": "Importar",
+    "export": "Exportar tareas",
+    "import": "Importar tareas",
     "changeTheme": "Cambiar Tema",
     "selectLanguage": "Seleccionar Idioma",
     "addTaskPlaceholder": "Añadir una nueva tarea",
@@ -25,5 +25,6 @@
     "importSuccessMessage": "Tus puntos y tareas han sido importados exitosamente.",
     "languageSelectionTitle": "Seleccionar Idioma",
     "languageEnglish": "Inglés",
-    "languageSpanish": "Español"
+    "languageSpanish": "Español",
+    "todoAppTitle" : "App de tareas por hacer"
 }

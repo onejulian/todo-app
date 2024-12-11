@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo List App con Sistema de Puntos</title>
+    <title data-i18n="todoAppTitle">Todo App</title>
 
     <!-- Script inline para aplicar la clase 'dark' antes de cargar Tailwind CSS -->
     <script>
@@ -111,6 +111,12 @@
                     title="Seleccionar Idioma" data-i18n-title="selectLanguage">
                     <i class="fas fa-globe text-lg"></i>
                 </button>
+                <!-- Botón de About -->
+                <button id="aboutButton"
+                    class="bg-gray-300 text-gray-900 p-2 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    title="About" data-i18n-title="about">
+                    <i class="fas fa-info-circle text-lg"></i>
+                </button>
             </div>
         </div>
         <!-- Menú Desplegable para Pantallas Pequeñas como Panel Lateral -->
@@ -145,6 +151,13 @@
                 title="Seleccionar Idioma" data-i18n-title="selectLanguage">
                 <i class="fas fa-globe text-lg"></i>
                 <span data-i18n="selectLanguage">Seleccionar Idioma</span>
+            </button>
+            <!-- Botón de About (Móvil) -->
+            <button id="aboutButtonMobile"
+                class="bg-gray-300 text-gray-900 p-2 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white flex items-center space-x-2"
+                title="About" data-i18n-title="about">
+                <i class="fas fa-info-circle text-lg"></i>
+                <span data-i18n="about">About</span>
             </button>
         </div>
     </header>
@@ -305,6 +318,78 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de About -->
+    <div id="aboutModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold" data-i18n="about">About</h2>
+                <button id="closeAboutModal"
+                    class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none"
+                    aria-label="Close">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <!-- Contenido en Inglés -->
+            <div id="aboutContent-en" class="language-content">
+                <h4>Features:</h4>
+                <ul class="list-disc list-inside">
+                    <li>Add, Edit, and Delete Tasks: Easily manage your daily tasks with intuitive controls.</li>
+                    <li>Points System: Earn 25 points for every completed task and lose 50 points for tasks not
+                        completed within 24 hours. Stay motivated and track your progress!</li>
+                    <li>Backup Your Tasks: Safeguard your tasks by exporting and importing them whenever you need.</li>
+                    <li>Customizable Themes: Personalize your experience by changing the app’s color theme to suit your
+                        style.</li>
+                    <li>Multilingual Support: Use it in your preferred language with our comprehensive language
+                        support.</li>
+                    <li>Mobile-Friendly: Access and manage your tasks on the go with our fully optimized mobile version.
+                    </li>
+                </ul>
+
+                <br>
+
+                <h4>Upcoming Updates:</h4>
+                <ul class="list-disc list-inside">
+                    <li>User Authentication: Soon, you’ll be able to create an account and securely log in to access
+                        your tasks from any device.</li>
+                    <li>Advanced Task Sorting: Organize your tasks effortlessly by sorting them based on various
+                        criteria.</li>
+                    <li>Task Descriptions: Add optional descriptions to each task for more detailed planning.</li>
+                </ul>
+            </div>
+            <!-- Contenido en Español -->
+            <div id="aboutContent-es" class="language-content hidden">
+                <h4>Características:</h4>
+                <ul class="list-disc list-inside">
+                    <li>Agregar, Editar y Eliminar Tareas: Gestiona fácilmente tus tareas diarias con controles
+                        intuitivos.</li>
+                    <li>Sistema de Puntos: Gana 25 puntos por cada tarea completada y pierde 50 puntos por tareas no
+                        completadas en 24 horas. ¡Mantente motivado y sigue tu progreso!</li>
+                    <li>Respaldo de tus Tareas: Protege tus tareas exportándolas e importándolas cuando lo necesites.
+                    </li>
+                    <li>Temas Personalizables: Personaliza tu experiencia cambiando el tema de color de la app según tu
+                        estilo.</li>
+                    <li>Soporte Multilingüe: Úsalo en tu idioma preferido con nuestro completo soporte de
+                        idiomas.</li>
+                    <li>Compatible con Móviles: Accede y gestiona tus tareas en cualquier lugar con nuestra versión
+                        móvil totalmente optimizada.</li>
+                </ul>
+
+                <br>
+
+                <h4>Próximas Actualizaciones:</h4>
+                <ul class="list-disc list-inside">
+                    <li>Autenticación de Usuarios: Próximamente, podrás crear una cuenta e iniciar sesión de forma
+                        segura para acceder a tus tareas desde cualquier dispositivo.</li>
+                    <li>Ordenamiento Avanzado de Tareas: Organiza tus tareas sin esfuerzo ordenándolas según diferentes
+                        criterios.</li>
+                    <li>Descripciones de Tareas: Agrega descripciones opcionales a cada tarea para una planificación más
+                        detallada.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Hidden File Input para Importar Tareas -->
     <input type="file" id="importFileInput" accept=".json" class="hidden">

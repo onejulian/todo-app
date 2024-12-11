@@ -84,3 +84,23 @@
 .dark #overlay {
     background-color: rgba(255, 255, 255, 0.3);
 }
+
+#aboutModal .language-content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+#aboutModal .language-content::-webkit-scrollbar {
+    display: none;
+}
+
+/* Para Firefox */
+#aboutModal .language-content {
+    scrollbar-width: none; /* Firefox */
+}
+
+/* Opcional: Prevenir que el contenido se desborde verticalmente */
+#aboutModal .language-content {
+    -ms-overflow-style: none;  /* IE and Edge */
+    overflow-y: scroll;        /* Permitir desplazamiento vertical sin mostrar scrollbar */
+}
