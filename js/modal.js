@@ -23,7 +23,7 @@ const Modal = (function () {
     function init(Points, Tasks) {
         // Mostrar Modal de Puntos
         document.getElementById('showPoints').addEventListener('click', () => {
-            pointsModal.classList.remove('hidden');
+            // pointsModal.classList.remove('hidden');
         });
 
         // Cerrar Modal de Puntos
@@ -67,18 +67,6 @@ const Modal = (function () {
                 }
             });
         }
-    }
-
-    function showConfirmResetModal() {
-        confirmResetModal.classList.remove('hidden');
-    }
-
-    function hideConfirmResetModal() {
-        confirmResetModal.classList.add('hidden');
-    }
-
-    function hidePointsModal() {
-        pointsModal.classList.add('hidden');
     }
 
     function showSuccessModal(message) {
