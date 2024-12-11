@@ -45,7 +45,10 @@
     <!-- Cargar Font Awesome -->
     <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
     
-    <!-- Estilos personalizados -->
+    <!-- Cargar estilos personalizados -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Estilos personalizados adicionales (si los hay) -->
     <style>
         /* Ocultar la barra de desplazamiento en navegadores WebKit */
         #todoList::-webkit-scrollbar {
@@ -75,7 +78,20 @@
                 <span>Puntos:</span>
                 <span id="pointsDisplay">0</span>
             </button>
-            <div class="flex items-center space-x-2">
+            <!-- Botón de Hamburguesa (Visible en Pantallas Pequeñas) -->
+            <button 
+                id="hamburgerButton" 
+                class="text-gray-900 dark:text-white focus:outline-none lg:hidden" 
+                aria-label="Menu" 
+                title="Abrir menú"
+            >
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+            <!-- Contenedor de Opciones del Header (Visible en Pantallas Grandes) -->
+            <div 
+                id="headerOptions" 
+                class="hidden lg:flex items-center space-x-2"
+            >
                 <!-- Botón de Exportar -->
                 <button 
                     id="exportButton" 
@@ -102,6 +118,46 @@
                 </button>
             </div>
         </div>
+        <!-- Menú Desplegable para Pantallas Pequeñas como Panel Lateral -->
+        <div 
+            id="mobileMenu" 
+            class="hidden lg:hidden flex flex-col space-y-2"
+        >
+            <!-- Botón de Cierre del Menú Móvil -->
+            <button 
+                id="closeMobileMenu" 
+                class="self-end focus:outline-none" 
+                aria-label="Cerrar menú" 
+                title="Cerrar menú"
+            >
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            <!-- Botones dentro del Menú Móvil -->
+            <button 
+                id="exportButtonMobile" 
+                class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center space-x-2"
+                title="Exportar Tareas"
+            >
+                <i class="fas fa-file-export"></i>
+                <span>Exportar</span>
+            </button>
+            <button 
+                id="importButtonMobile" 
+                class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center space-x-2"
+                title="Importar Tareas"
+            >
+                <i class="fas fa-file-import"></i>
+                <span>Importar</span>
+            </button>
+            <button 
+                id="toggleModeMobile" 
+                class="bg-gray-300 text-gray-900 p-2 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white flex items-center space-x-2"
+                title="Cambiar modo oscuro o claro"
+            >
+                <i id="modeIconMobile" class="fas fa-moon text-lg"></i>
+                <span>Cambiar Tema</span>
+            </button>
+        </div>
     </header>
     <main class="flex items-center justify-center flex-grow w-full px-4 sm:px-6 lg:px-8">
         <div class="bg-gray-100 p-6 rounded-lg shadow-md w-full max-w-md dark:bg-gray-800 dark:text-white">
@@ -125,6 +181,9 @@
             </ul>
         </div>
     </main>
+
+    <!-- Overlay para el panel lateral -->
+    <div id="overlay" class="hidden"></div>
 
     <!-- Modal para mostrar puntos detallados -->
     <div id="pointsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
@@ -175,7 +234,7 @@
     <div id="confirmImportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
             <h2 class="text-2xl font-bold mb-4">Confirmar Importación de Tareas</h2>
-            <p class="text-lg">¿Deseas reemplazar tus tareas actuales con las importadas? Esta acción no se puede deshacer.</p>
+            <p class="text-lg">¿Deseas reemplazar tus tareas y puntos actuales con los importados? Esta acción no se puede deshacer.</p>
             <div class="flex justify-end space-x-4 mt-6">
                 <button id="confirmImportYes" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     Sí, Importar
@@ -204,7 +263,7 @@
     <div id="importSuccessModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
             <h2 class="text-2xl font-bold mb-4">Éxito</h2>
-            <p class="text-lg" id="importSuccessMessage">Tus tareas han sido importadas exitosamente.</p>
+            <p class="text-lg" id="importSuccessMessage">Tus puntos y tareas han sido importados exitosamente.</p>
             <div class="flex justify-end space-x-4 mt-6">
                 <button id="closeImportSuccessModal" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     Cerrar
@@ -223,6 +282,7 @@
     <script src="js/modal.js"></script>
     <script src="js/tasks.js"></script>
     <script src="js/importExport.js"></script>
+    <script src="js/nav.js"></script> <!-- Nuevo Archivo -->
     <script src="js/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,81 @@
+/* styles.css */
+
+/* Estilos para el panel lateral */
+#mobileMenu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #f9fafb; /* Color de fondo claro */
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 50;
+    padding: 20px;
+}
+
+.dark #mobileMenu {
+    background-color: #1f2937; /* Color de fondo oscuro */
+    color: #f9fafb;
+}
+
+/* Clase para mostrar el panel lateral */
+#mobileMenu.show {
+    transform: translateX(0);
+}
+
+/* Overlay cuando el panel está abierto */
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 40;
+}
+
+#overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Botón de cierre dentro del panel lateral */
+#closeMobileMenu {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: inherit;
+}
+
+/* Transición para las opciones del menú */
+#mobileMenu button {
+    width: 100%;
+    text-align: left;
+    padding: 10px 0;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: inherit;
+    transition: background-color 0.2s ease-in-out;
+}
+
+#mobileMenu button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark #mobileMenu button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Ajustes para las transiciones y animaciones */
+.transition-transform {
+    transition: transform 0.3s ease-in-out;
+}

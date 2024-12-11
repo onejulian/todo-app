@@ -7,4 +7,5 @@ document.addEventListener('DOMContentLoaded', function() {
     Modal.init(Points, Tasks);
     Tasks.init();
     ImportExport.init();
+    Nav.init(); // Inicializar el módulo de navegación
 });
