@@ -13,8 +13,11 @@ const Tasks = (function (Storage, Points, Modal) {
             }
         });
 
-        // Cargar tareas existentes
+        // Load existing tasks
         loadTasks();
+
+        // Calculate net points on initialization
+        calculateNetPoints();
     }
 
     function handleAddTask() {
@@ -23,6 +26,7 @@ const Tasks = (function (Storage, Points, Modal) {
             addTask({ text: taskText });
             todoInput.value = '';
             saveTasks();
+            calculateNetPoints();
         }
     }
 
@@ -33,15 +37,16 @@ const Tasks = (function (Storage, Points, Modal) {
 
         if (taskData.completed) {
             li.classList.add('completed', 'line-through', 'opacity-50');
+            li.dataset.completedAt = taskData.completedAt || new Date().toISOString();
         }
 
         if (taskData.overdue) {
             li.classList.add('overdue', 'bg-red-500', 'dark:bg-red-700');
         }
 
-        // Condicionar la inclusión del botón de editar
+        // Conditionally include the edit button
         const editButtonHTML = taskData.completed ? '' : `
-            <button class="edit-button text-blue-500 hover:text-blue-600 focus:outline-none" title="Editar">
+            <button class="edit-button text-blue-500 hover:text-blue-600 focus:outline-none" title="Edit">
                 <i class="fas fa-pencil-alt text-lg"></i>
             </button>
         `;
@@ -53,38 +58,42 @@ const Tasks = (function (Storage, Points, Modal) {
             </div>
             <div class="opacity-100 sm:opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-200 flex space-x-4">
                 ${editButtonHTML}
-                <button class="delete-button text-red-500 hover:text-red-600 focus:outline-none" title="Eliminar">
+                <button class="delete-button text-red-500 hover:text-red-600 focus:outline-none" title="Delete">
                     <i class="fas fa-trash text-lg"></i>
                 </button>
             </div>
         `;
-        // Usar prepend para agregar la tarea al inicio
+        // Use prepend to add the task at the beginning
         todoList.prepend(li);
 
-        // Evento para marcar como completada una tarea
+        // Event to mark a task as completed
         li.querySelector('.complete-checkbox').addEventListener('change', function () {
             if (this.checked) {
                 li.classList.add('completed', 'line-through', 'opacity-50');
+                // Set completedAt to current time
+                li.dataset.completedAt = new Date().toISOString();
                 Points.addPoints(25);
-                // Eliminar el botón de editar
+                // Remove the edit button
                 const editButton = li.querySelector('.edit-button');
                 if (editButton) {
                     editButton.remove();
                 }
             } else {
                 li.classList.remove('completed', 'line-through', 'opacity-50');
-                // Opcional: Restar puntos si se desmarca una tarea completada
+                // Remove completedAt
+                delete li.dataset.completedAt;
+                // Optionally: Subtract points if unmarking a completed task
                 Points.subtractPoints(25);
-                // Reagregar el botón de editar
+                // Re-add the edit button
                 const deleteButton = li.querySelector('.delete-button');
                 const editButton = document.createElement('button');
                 editButton.className = 'edit-button text-blue-500 hover:text-blue-600 focus:outline-none';
-                editButton.title = 'Editar';
+                editButton.title = 'Edit';
                 editButton.innerHTML = '<i class="fas fa-pencil-alt text-lg"></i>';
-                // Insertar el botón de editar antes del botón de eliminar
+                // Insert the edit button before the delete button
                 li.querySelector('.opacity-100').insertBefore(editButton, deleteButton);
 
-                // Añadir el evento para editar nuevamente
+                // Add the event to edit again
                 editButton.addEventListener('click', function () {
                     const span = li.querySelector('.task-text');
                     const input = document.createElement('input');
@@ -95,15 +104,15 @@ const Tasks = (function (Storage, Points, Modal) {
                     input.focus();
 
                     input.addEventListener('blur', function () {
-                        const nuevoTexto = input.value.trim();
-                        if (nuevoTexto) {
+                        const newText = input.value.trim();
+                        if (newText) {
                             const newSpan = document.createElement('span');
                             newSpan.className = 'task-text text-lg';
-                            newSpan.textContent = nuevoTexto;
+                            newSpan.textContent = newText;
                             input.replaceWith(newSpan);
                             saveTasks();
                         } else {
-                            // Si el texto está vacío, eliminar la tarea
+                            // If text is empty, remove the task
                             li.remove();
                             saveTasks();
                         }
@@ -117,9 +126,10 @@ const Tasks = (function (Storage, Points, Modal) {
                 });
             }
             saveTasks();
+            calculateNetPoints();
         });
 
-        // Evento para editar una tarea
+        // Event to edit a task
         if (!taskData.completed) {
             li.querySelector('.edit-button').addEventListener('click', function () {
                 const span = li.querySelector('.task-text');
@@ -131,15 +141,15 @@ const Tasks = (function (Storage, Points, Modal) {
                 input.focus();
 
                 input.addEventListener('blur', function () {
-                    const nuevoTexto = input.value.trim();
-                    if (nuevoTexto) {
+                    const newText = input.value.trim();
+                    if (newText) {
                         const newSpan = document.createElement('span');
                         newSpan.className = 'task-text text-lg';
-                        newSpan.textContent = nuevoTexto;
+                        newSpan.textContent = newText;
                         input.replaceWith(newSpan);
                         saveTasks();
                     } else {
-                        // Si el texto está vacío, eliminar la tarea
+                        // If text is empty, remove the task
                         li.remove();
                         saveTasks();
                     }
@@ -153,56 +163,57 @@ const Tasks = (function (Storage, Points, Modal) {
             });
         }
 
-        // Evento para eliminar una tarea con confirmación
+        // Event to delete a task with confirmation
         li.querySelector('.delete-button').addEventListener('click', function (event) {
-            event.stopPropagation(); // Evita que el click propague al documento
+            event.stopPropagation(); // Prevent click from propagating to the document
 
             if (!li.classList.contains('deleting')) {
-                // Marcar la tarea para eliminación
+                // Mark the task for deletion
                 li.classList.add('deleting', 'bg-red-500', 'dark:bg-red-700');
 
-                // Ocultar el botón de editar si existe
+                // Hide the edit button if it exists
                 const editButton = li.querySelector('.edit-button');
                 if (editButton) {
                     editButton.style.display = 'none';
                 }
 
-                // Cambiar el color del botón de eliminar a negro
+                // Change the delete button color to black
                 const deleteButton = li.querySelector('.delete-button');
                 deleteButton.classList.remove('text-red-500', 'hover:text-red-600');
                 deleteButton.classList.add('text-black', 'hover:text-gray-700');
 
-                // Agregar una referencia al listener para poder eliminarlo después
+                // Add a reference to the listener to remove it later
                 const cancelDeletion = function (e) {
                     if (!li.contains(e.target)) {
-                        // Cancelar la eliminación
+                        // Cancel the deletion
                         li.classList.remove('deleting', 'bg-red-500', 'dark:bg-red-700');
 
-                        // Mostrar nuevamente el botón de editar si la tarea no está completada
+                        // Show the edit button again if the task is not completed
                         if (editButton && !li.classList.contains('completed')) {
                             editButton.style.display = 'inline-block';
                         }
 
-                        // Restaurar el color original del botón de eliminar
+                        // Restore the original color of the delete button
                         deleteButton.classList.remove('text-black', 'hover:text-gray-700');
                         deleteButton.classList.add('text-red-500', 'hover:text-red-600');
 
-                        // Remover el listener de cancelación
+                        // Remove the cancellation listener
                         document.removeEventListener('click', cancelDeletion);
                     }
                 };
 
-                // Agregar el listener para cancelar la eliminación al hacer clic fuera
+                // Add the listener to cancel deletion when clicking outside
                 document.addEventListener('click', cancelDeletion);
             } else {
-                // Confirmar y eliminar la tarea definitivamente
-                // Si la tarea estaba completada, restar los puntos correspondientes
+                // Confirm and permanently delete the task
+                // If the task was completed, subtract the corresponding points
                 if (li.classList.contains('completed')) {
                     Points.subtractPoints(25);
                 }
 
                 li.remove();
                 saveTasks();
+                calculateNetPoints();
             }
         });
 
@@ -214,6 +225,7 @@ const Tasks = (function (Storage, Points, Modal) {
             text: task.querySelector('.task-text').textContent,
             createdAt: task.dataset.createdAt,
             completed: task.classList.contains('completed'),
+            completedAt: task.dataset.completedAt || null,
             overdue: task.classList.contains('overdue')
         }));
         Storage.saveTasks(tasks);
@@ -222,6 +234,52 @@ const Tasks = (function (Storage, Points, Modal) {
     function loadTasks() {
         const tasks = Storage.loadTasks();
         tasks.forEach(task => addTask(task));
+    }
+
+    // Function to get the last completed task
+    function getLastCompletedTask() {
+        const completedTasks = Array.from(todoList.querySelectorAll('.task.completed'));
+        if (completedTasks.length === 0) return null;
+
+        // Sort completed tasks by completedAt descending
+        completedTasks.sort((a, b) => {
+            const dateA = new Date(a.dataset.completedAt);
+            const dateB = new Date(b.dataset.completedAt);
+            return dateB - dateA;
+        });
+
+        return completedTasks[0];
+    }
+
+    // Function to calculate the number of 24-hour periods since last completion
+    function calculatePeriodsSinceLastCompletion(completedAt) {
+        const lastCompletionDate = new Date(completedAt);
+        const now = new Date();
+        const diffInMs = now - lastCompletionDate;
+        const diffInHours = diffInMs / (1000 * 60 * 60);
+        return Math.floor(diffInHours / 24);
+    }
+
+    // Function to calculate and set net points
+    function calculateNetPoints() {
+        const tasks = Storage.loadTasks();
+        const totalCompleted = tasks.filter(task => task.completed).length;
+        const brutoPoints = totalCompleted * 25;
+
+        const lastCompletedTask = tasks
+            .filter(task => task.completed && task.completedAt)
+            .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt))[0];
+
+        let periods = 0;
+        if (lastCompletedTask && lastCompletedTask.completedAt) {
+            periods = calculatePeriodsSinceLastCompletion(lastCompletedTask.completedAt);
+        }
+
+        const netPoints = brutoPoints - (50 * periods);
+
+        // Assuming Points has a method to set the total points directly
+        // If not, you might need to adjust this based on your Points implementation
+        Points.setPoints(netPoints);
     }
 
     return {
