@@ -25,9 +25,10 @@
     "importSuccessMessage": "Your points and tasks have been successfully imported.",
     "languageSelectionTitle": "Select Language",
     "languageEnglish": "English",
-    "languageSpanish": "Spanish",
-    "todoAppTitle" : "To do App",
-    "about" : "About",
+    "languageSpanish": "Español",
+    "languageFrench": "Français",
+    "todoAppTitle": "To do App",
+    "about": "About",
     "countdownMessage1": "Complete a task before ",
     "countdownMessage2": " to avoid losing 50 points."
-}
+  }

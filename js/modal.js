@@ -15,10 +15,8 @@ const Modal = (function () {
     const aboutButtonMobile = document.getElementById('aboutButtonMobile');
     const aboutModal = document.getElementById('aboutModal');
     const closeAboutModal = document.getElementById('closeAboutModal');
-    const aboutContentEn = document.getElementById('aboutContent-en');
-    const aboutContentEs = document.getElementById('aboutContent-es');
 
-    function init(Points, Tasks) {
+    function init(Points) {
         // Mostrar Modal de Puntos
         document.getElementById('showPoints').addEventListener('click', () => {
             pointsModal.classList.remove('hidden');
@@ -38,6 +36,24 @@ const Modal = (function () {
         // Cerrar Modal de Éxito en Importación
         closeImportSuccessModalBtn.addEventListener('click', () => {
             hideImportSuccessModal();
+        });
+
+        aboutButton.addEventListener('click', () => {
+            aboutModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Deshabilita el scroll en el body
+        
+            // Obtén el contenido del about desde aboutContent.js
+            const aboutContent = AboutContent.getAboutContent();
+            const existingContent = aboutModal.querySelector('#aboutContent-en, #aboutContent-es');
+        
+            // Inserta el contenido en el modal, después del botón de cerrar
+            const aboutModalContentContainer = aboutModal.querySelector('.flex.justify-between.items-center.mb-4').parentNode;
+            if (!existingContent) {
+                aboutModalContentContainer.insertAdjacentHTML('beforeend', aboutContent);
+            }
+        
+            // Asegúrate de que el contenido se muestre en el idioma correcto
+            updateAboutContentLanguage();
         });
 
         // **Eventos para la Modal "About"**
@@ -108,22 +124,7 @@ const Modal = (function () {
 
     // **Funciones para la Modal "About"**
     function openAboutModal() {
-        // Obtener el idioma seleccionado, por defecto 'en'
-        const language = localStorage.getItem('language') || 'en';
-
         Points.updateCountdownDisplay();
-
-        // Mostrar el contenido correspondiente
-        if (language === 'es') {
-            aboutContentEn.classList.add('hidden');
-            aboutContentEs.classList.remove('hidden');
-        } else {
-            aboutContentEs.classList.add('hidden');
-            aboutContentEn.classList.remove('hidden');
-        }
-
-        // Mostrar la modal
-        aboutModal.classList.remove('hidden');
     }
 
     function hideAboutModal() {
@@ -138,6 +139,18 @@ const Modal = (function () {
             mobileMenu.classList.add('hidden');
             overlay.classList.add('hidden');
         }
+    }
+
+    function updateAboutContentLanguage() {
+        const selectedLanguage = localStorage.getItem('language') || 'en';
+        const aboutContents = aboutModal.querySelectorAll('.language-content');
+        aboutContents.forEach(content => {
+            if (content.id === `aboutContent-${selectedLanguage}`) {
+                content.classList.remove('hidden');
+            } else {
+                content.classList.add('hidden');
+            }
+        });
     }
 
     return {

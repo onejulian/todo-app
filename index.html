@@ -270,6 +270,12 @@
                     data-i18n="languageSpanish">
                     Español
                 </button>
+                <!-- Botón para Francés -->
+                <button id="selectFrench"
+                    class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                    data-i18n="languageFrench">
+                    Francés
+                </button>
             </div>
             <div class="flex justify-end mt-6">
                 <button id="closeLanguageModal"
@@ -292,77 +298,7 @@
                     <i class="fas fa-times text-2xl"></i>
                 </button>
             </div>
-            <!-- Contenido en Inglés -->
-            <div id="aboutContent-en" class="language-content">
-                <h4>Features:</h4>
-                <ul class="list-disc list-inside">
-                    <li>Add, Edit, and Delete Tasks: Easily manage your daily tasks with intuitive controls.</li>
-                    <li>Points System: Earn 25 points for every completed task and lose 50 points for tasks not
-                        completed within 24 hours. Stay motivated and track your progress!</li>
-                    <li>Backup Your Tasks: Safeguard your tasks by exporting and importing them whenever you need.</li>
-                    <li>Customizable Themes: Personalize your experience by changing the app’s color theme to suit your
-                        style.</li>
-                    <li>Multilingual Support: Use it in your preferred language with our comprehensive language
-                        support.</li>
-                    <li>Mobile-Friendly: Access and manage your tasks on the go with our fully optimized mobile version.
-                    </li>
-                </ul>
-
-                <br>
-
-                <h4>Upcoming Updates:</h4>
-                <ul class="list-disc list-inside">
-                    <li>User Authentication: Soon, you’ll be able to create an account and securely log in to access
-                        your tasks from any device.</li>
-                    <li>Advanced Task Sorting: Organize your tasks effortlessly by sorting them based on various
-                        criteria.</li>
-                    <li>Task Descriptions: Add optional descriptions to each task for more detailed planning.</li>
-                </ul>
-                <br>
-                <p>
-                    <a href="https://github.com/onejulian/todo-app" target="_blank" rel="noopener noreferrer"
-                        class="text-blue-500 hover:underline">
-                        Collaborate with this project
-                    </a>
-                </p>
-            </div>
-            <!-- Contenido en Español -->
-            <div id="aboutContent-es" class="language-content hidden">
-                <h4>Características:</h4>
-                <ul class="list-disc list-inside">
-                    <li>Agregar, Editar y Eliminar Tareas: Gestiona fácilmente tus tareas diarias con controles
-                        intuitivos.</li>
-                    <li>Sistema de Puntos: Gana 25 puntos por cada tarea completada y pierde 50 puntos por tareas no
-                        completadas en 24 horas. ¡Mantente motivado y sigue tu progreso!</li>
-                    <li>Respaldo de tus Tareas: Protege tus tareas exportándolas e importándolas cuando lo necesites.
-                    </li>
-                    <li>Temas Personalizables: Personaliza tu experiencia cambiando el tema de color de la app según tu
-                        estilo.</li>
-                    <li>Soporte Multilingüe: Úsalo en tu idioma preferido con nuestro completo soporte de
-                        idiomas.</li>
-                    <li>Compatible con Móviles: Accede y gestiona tus tareas en cualquier lugar con nuestra versión
-                        móvil totalmente optimizada.</li>
-                </ul>
-
-                <br>
-
-                <h4>Próximas Actualizaciones:</h4>
-                <ul class="list-disc list-inside">
-                    <li>Autenticación de Usuarios: Próximamente, podrás crear una cuenta e iniciar sesión de forma
-                        segura para acceder a tus tareas desde cualquier dispositivo.</li>
-                    <li>Ordenamiento Avanzado de Tareas: Organiza tus tareas sin esfuerzo ordenándolas según diferentes
-                        criterios.</li>
-                    <li>Descripciones de Tareas: Agrega descripciones opcionales a cada tarea para una planificación más
-                        detallada.</li>
-                </ul>
-                <br>
-                <p>
-                    <a href="https://github.com/onejulian/todo-app" target="_blank" rel="noopener noreferrer"
-                        class="text-blue-500 hover:underline">
-                        Colabora con este proyecto
-                    </a>
-                </p>
-            </div>
+            <!-- El contenido se insertará aquí desde aboutContent.js -->
         </div>
     </div>
 
@@ -370,6 +306,7 @@
     <input type="file" id="importFileInput" accept=".json" class="hidden">
 
     <!-- Inclusión de Archivos JavaScript Separados -->
+    <script src="js/aboutContent.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/theme.js"></script>
     <script src="js/points.js"></script>

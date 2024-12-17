@@ -4,6 +4,7 @@ const I18n = (function (Storage) {
     const languageModal = document.getElementById('languageModal');
     const selectEnglish = document.getElementById('selectEnglish');
     const selectSpanish = document.getElementById('selectSpanish');
+    const selectFrench = document.getElementById('selectFrench');
     const closeLanguageModal = document.getElementById('closeLanguageModal');
 
     let currentLanguage = 'en';
@@ -18,8 +19,11 @@ const I18n = (function (Storage) {
         } else if (navLang.indexOf('en') > -1) {
             Storage.saveLanguage('en')
             return 'en';
+        } else if (navLang.indexOf('fr') > -1) { // Agregar francés como opción si el navegador está en francés
+            Storage.saveLanguage('fr')
+            return 'fr';
         } else {
-            return 'en'; // Inglés por defecto si no es español ni inglés
+            return 'en'; // Inglés por defecto si no es español, inglés ni francés
         }
     }
 
@@ -122,6 +126,13 @@ const I18n = (function (Storage) {
         if (selectSpanish) {
             selectSpanish.addEventListener('click', () => {
                 changeLanguage('es');
+                hideLanguageModal();
+            });
+        }
+        // Event listener para el botón de francés
+        if (selectFrench) {
+            selectFrench.addEventListener('click', () => {
+                changeLanguage('fr');
                 hideLanguageModal();
             });
         }
