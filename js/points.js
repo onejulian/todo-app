@@ -75,7 +75,6 @@ const Points = (function (Storage) {
 
         if (timeLeft <= 0) {
             // Si el tiempo ha expirado, desmarcar la tarea y recalcular
-            Tasks.uncheckCompletedTasks();
             initCountdown(); // Reiniciar el temporizador
             return;
         }
