@@ -15,6 +15,7 @@ const Tasks = (function (Storage, Points, Modal) {
 
         // Load existing tasks
         loadTasks();
+        removeCheckboxFromOldCompletedTasks();
 
         // Calculate net points on initialization
         calculateNetPoints();
@@ -238,19 +239,22 @@ const Tasks = (function (Storage, Points, Modal) {
         tasks.forEach(task => addTask(task));
     }
 
-    // Function to get the last completed task
-    function getLastCompletedTask() {
-        const completedTasks = Array.from(todoList.querySelectorAll('.task.completed'));
-        if (completedTasks.length === 0) return null;
+    function removeCheckboxFromOldCompletedTasks() {
+        const tasks = Array.from(todoList.querySelectorAll('.task.completed'));
+        const now = new Date();
+        tasks.forEach(task => {
+            const completedAt = new Date(task.dataset.completedAt);
+            const diffInMs = now - completedAt;
+            const diffInHours = diffInMs / (1000 * 60 * 60);
 
-        // Sort completed tasks by completedAt descending
-        completedTasks.sort((a, b) => {
-            const dateA = new Date(a.dataset.completedAt);
-            const dateB = new Date(b.dataset.completedAt);
-            return dateB - dateA;
+            if (diffInHours >= 24) {
+                // Eliminar el checkbox
+                const checkbox = task.querySelector('.complete-checkbox');
+                if (checkbox) {
+                    checkbox.remove();
+                }
+            }
         });
-
-        return completedTasks[0];
     }
 
     // Function to calculate the number of 24-hour periods since last completion
