@@ -1,5 +1,3 @@
-// js/nav.js
-
 const Nav = (function () {
     const hamburgerButton = document.getElementById('hamburgerButton');
     const mobileMenu = document.getElementById('mobileMenu');

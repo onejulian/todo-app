@@ -1,5 +1,3 @@
-// js/importExport.js
-
 const ImportExport = (function (Storage, Tasks, Points, Modal) {
     const exportButton = document.getElementById('exportButton');
     const importButton = document.getElementById('importButton');

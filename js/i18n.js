@@ -1,5 +1,3 @@
-// js/i18n.js
-
 const I18n = (function (Storage) {
     const languageButton = document.getElementById('languageButton');
     const languageButtonMobile = document.getElementById('languageButtonMobile');

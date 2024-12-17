@@ -1,5 +1,3 @@
-// js/modal.js
-
 const Modal = (function () {
     const pointsModal = document.getElementById('pointsModal');
     const closePointsModalBtn = document.getElementById('closePointsModal');

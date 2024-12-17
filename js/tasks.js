@@ -1,5 +1,3 @@
-// js/tasks.js
-
 const Tasks = (function (Storage, Points, Modal) {
     const todoList = document.getElementById('todoList');
     const addButton = document.getElementById('addButton');

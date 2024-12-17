@@ -1,5 +1,3 @@
-// js/main.js
-
 document.addEventListener('DOMContentLoaded', function () {
     // Inicializar Módulos
     I18n.init();
@@ -8,5 +6,5 @@ document.addEventListener('DOMContentLoaded', function () {
     Modal.init(Points, Tasks);
     Tasks.init();
     ImportExport.init();
-    Nav.init(); // Inicializar el módulo de navegación
+    Nav.init();
 });

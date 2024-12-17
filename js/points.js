@@ -1,5 +1,3 @@
-// js/points.js
-
 const Points = (function (Storage) {
     let points = 0;
     const pointsDisplay = document.getElementById('pointsDisplay');

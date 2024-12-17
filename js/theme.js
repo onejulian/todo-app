@@ -1,5 +1,3 @@
-// js/theme.js
-
 const Theme = (function (Storage) {
     const toggleButton = document.getElementById('toggleMode');
     const toggleButtonMobile = document.getElementById('toggleModeMobile');

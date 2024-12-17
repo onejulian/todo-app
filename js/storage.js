@@ -1,5 +1,3 @@
-// js/storage.js
-
 const Storage = (function () {
     const POINTS_KEY = 'points';
     const TASKS_KEY = 'tasks';
