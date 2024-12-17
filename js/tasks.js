@@ -46,23 +46,23 @@ const Tasks = (function (Storage, Points, Modal) {
 
         // Conditionally include the edit button
         const editButtonHTML = taskData.completed ? '' : `
-            <button class="edit-button text-blue-500 hover:text-blue-600 focus:outline-none" title="Edit">
-                <i class="fas fa-pencil-alt text-lg"></i>
-            </button>
-        `;
+          <button class="edit-button text-blue-500 hover:text-blue-600 focus:outline-none" title="Edit">
+              <i class="fas fa-pencil-alt text-lg"></i>
+          </button>
+      `;
 
         li.innerHTML = `
-            <div class="flex items-center space-x-3">
-                <input type="checkbox" class="complete-checkbox" ${taskData.completed ? 'checked' : ''}>
-                <span class="task-text text-lg">${taskData.text}</span>
-            </div>
-            <div class="opacity-100 sm:opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-200 flex space-x-4">
-                ${editButtonHTML}
-                <button class="delete-button text-red-500 hover:text-red-600 focus:outline-none" title="Delete">
-                    <i class="fas fa-trash text-lg"></i>
-                </button>
-            </div>
-        `;
+          <div class="flex items-center space-x-3">
+              <input type="checkbox" class="complete-checkbox" ${taskData.completed ? 'checked' : ''}>
+              <span class="task-text text-lg">${taskData.text}</span>
+          </div>
+          <div class="opacity-100 sm:opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-200 flex space-x-4">
+              ${editButtonHTML}
+              <button class="delete-button text-red-500 hover:text-red-600 focus:outline-none" title="Delete">
+                  <i class="fas fa-trash text-lg"></i>
+              </button>
+          </div>
+      `;
         // Use prepend to add the task at the beginning
         todoList.prepend(li);
 
@@ -263,9 +263,15 @@ const Tasks = (function (Storage, Points, Modal) {
     // Function to calculate and set net points
     function calculateNetPoints() {
         const tasks = Storage.loadTasks();
-        const totalCompleted = tasks.filter(task => task.completed).length;
-        const brutoPoints = totalCompleted * 25;
 
+        //Filter tasks completed in the last 24 hours
+        const now = new Date();
+        const twentyFourHoursAgo = new Date(now - 24 * 60 * 60 * 1000);
+        const recentCompletedTasks = tasks.filter(task => task.completed && new Date(task.completedAt) >= twentyFourHoursAgo);
+
+        const recentBrutoPoints = recentCompletedTasks.length * 25;
+
+        // Get the last completed task, regardless of when it was completed
         const lastCompletedTask = tasks
             .filter(task => task.completed && task.completedAt)
             .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt))[0];
@@ -275,11 +281,9 @@ const Tasks = (function (Storage, Points, Modal) {
             periods = calculatePeriodsSinceLastCompletion(lastCompletedTask.completedAt);
         }
 
-        const netPoints = brutoPoints - (50 * periods);
+        const netPoints = recentBrutoPoints - (50 * periods);
 
-        // Assuming Points has a method to set the total points directly
-        // If not, you might need to adjust this based on your Points implementation
-        Points.setPoints(netPoints);
+        Points.setPoints(Math.max(netPoints, 0)); // Ensure net points don't go below zero
     }
 
     return {
