@@ -233,6 +233,8 @@ const Tasks = (function (Storage, Points, Modal) {
 
     function loadTasks() {
         const tasks = Storage.loadTasks();
+        // Ordenar las tareas por fecha de creación (createdAt) en orden ascendente
+        tasks.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
         tasks.forEach(task => addTask(task));
     }
 
