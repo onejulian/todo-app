@@ -23,6 +23,7 @@ const I18n = (function (Storage) {
             Storage.saveLanguage('fr')
             return 'fr';
         } else {
+            Storage.saveLanguage('en')
             return 'en'; // Inglés por defecto si no es español, inglés ni francés
         }
     }
@@ -101,12 +102,10 @@ const I18n = (function (Storage) {
         let savedLanguage = Storage.getLanguage();
         if (!savedLanguage) {
             savedLanguage = getPreferredLanguage();
-        } else {
-            currentLanguage = savedLanguage;
         }
 
         // Cargar las traducciones iniciales
-        loadTranslations(currentLanguage).then(() => {
+        loadTranslations(savedLanguage).then(() => {
             applyTranslations();
         });
 
