@@ -8,7 +8,7 @@ const I18n = (function (Storage) {
     const selectSpanish = document.getElementById('selectSpanish');
     const closeLanguageModal = document.getElementById('closeLanguageModal');
 
-    let currentLanguage = 'es'; // Por defecto Español
+    let currentLanguage = 'en';
     let translations = {};
 
     function getPreferredLanguage() {
@@ -44,7 +44,14 @@ const I18n = (function (Storage) {
         document.querySelectorAll('[data-i18n]').forEach(element => {
             const key = element.getAttribute('data-i18n');
             if (translations[key]) {
-                element.textContent = translations[key];
+                // Si el elemento es countdownMessage, no lo actualices directamente
+                if (key !== 'countdownMessage') {
+                    element.textContent = translations[key];
+                } else {
+                    // Actualizar el texto antes de los placeholders
+                    const countdownMessage = translations[key].split('h:m:s')[0];
+                    element.textContent = countdownMessage;
+                }
             }
         });
 
@@ -81,6 +88,10 @@ const I18n = (function (Storage) {
     function hideLanguageModal() {
         languageModal.classList.remove('flex');
         languageModal.classList.add('hidden');
+    }
+
+    function getTranslation(key) {
+        return translations[key] || ''; // Devuelve la traducción o una cadena vacía si no existe
     }
 
     function init() {
@@ -127,6 +138,7 @@ const I18n = (function (Storage) {
     return {
         init,
         showLanguageModal,
-        hideLanguageModal
+        hideLanguageModal,
+        getTranslation
     };
 })(Storage);

@@ -27,5 +27,7 @@
     "languageEnglish": "English",
     "languageSpanish": "Spanish",
     "todoAppTitle" : "To do App",
-    "about" : "About"
+    "about" : "About",
+    "countdownMessage1": "Complete a task before ",
+    "countdownMessage2": " to avoid losing 50 points."
 }

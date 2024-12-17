@@ -239,6 +239,20 @@ const Tasks = (function (Storage, Points, Modal) {
         tasks.forEach(task => addTask(task));
     }
 
+    function getLastCompletedTask() {
+        const completedTasks = Array.from(todoList.querySelectorAll('.task.completed'));
+        if (completedTasks.length === 0) return null;
+
+        // Sort completed tasks by completedAt descending
+        completedTasks.sort((a, b) => {
+            const dateA = new Date(a.dataset.completedAt);
+            const dateB = new Date(b.dataset.completedAt);
+            return dateB - dateA;
+        });
+
+        return completedTasks[0];
+    }
+
     function removeCheckboxFromOldCompletedTasks() {
         const tasks = Array.from(todoList.querySelectorAll('.task.completed'));
         const now = new Date();
@@ -294,6 +308,8 @@ const Tasks = (function (Storage, Points, Modal) {
 
     return {
         init,
-        addTask
+        addTask,
+        getLastCompletedTask,
+        removeCheckboxFromOldCompletedTasks
     };
 })(Storage, Points, Modal);

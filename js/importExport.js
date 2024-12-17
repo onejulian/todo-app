@@ -41,6 +41,7 @@ const ImportExport = (function (Storage, Tasks, Points, Modal) {
             text: task.querySelector('.task-text').textContent,
             createdAt: task.dataset.createdAt,
             completed: task.classList.contains('completed'),
+            completedAt: task.dataset.completedAt,
             overdue: task.classList.contains('overdue')
         }));
         const data = {
@@ -109,6 +110,7 @@ const ImportExport = (function (Storage, Tasks, Points, Modal) {
                 importedData.tasks.slice().reverse().forEach(task => Tasks.addTask(task));
                 // Establecer los puntos importados
                 Points.setPoints(importedData.points);
+                Tasks.removeCheckboxFromOldCompletedTasks();
 
                 // Cerrar los modales
                 Modal.hideConfirmImportModal();

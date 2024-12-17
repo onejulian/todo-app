@@ -27,5 +27,7 @@
     "languageEnglish": "Inglés",
     "languageSpanish": "Español",
     "todoAppTitle" : "App de tareas por hacer",
-    "about" : "Acerca de"
+    "about" : "Acerca de",
+    "countdownMessage1": "Completa una tarea antes de ",
+    "countdownMessage2": " para no perder 50 puntos."
 }

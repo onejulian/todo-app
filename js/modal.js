@@ -23,7 +23,8 @@ const Modal = (function () {
     function init(Points, Tasks) {
         // Mostrar Modal de Puntos
         document.getElementById('showPoints').addEventListener('click', () => {
-            // pointsModal.classList.remove('hidden');
+            pointsModal.classList.remove('hidden');
+            Points.updateCountdownDisplay();
         });
 
         // Cerrar Modal de Puntos
@@ -111,6 +112,8 @@ const Modal = (function () {
     function openAboutModal() {
         // Obtener el idioma seleccionado, por defecto 'en'
         const language = localStorage.getItem('language') || 'en';
+
+        Points.updateCountdownDisplay();
 
         // Mostrar el contenido correspondiente
         if (language === 'es') {
