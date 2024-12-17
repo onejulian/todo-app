@@ -41,17 +41,17 @@ const Modal = (function () {
         aboutButton.addEventListener('click', () => {
             aboutModal.classList.remove('hidden');
             document.body.style.overflow = 'hidden'; // Deshabilita el scroll en el body
-        
+
             // Obtén el contenido del about desde aboutContent.js
             const aboutContent = AboutContent.getAboutContent();
             const existingContent = aboutModal.querySelector('#aboutContent-en, #aboutContent-es');
-        
+
             // Inserta el contenido en el modal, después del botón de cerrar
             const aboutModalContentContainer = aboutModal.querySelector('.flex.justify-between.items-center.mb-4').parentNode;
             if (!existingContent) {
                 aboutModalContentContainer.insertAdjacentHTML('beforeend', aboutContent);
             }
-        
+
             // Asegúrate de que el contenido se muestre en el idioma correcto
             updateAboutContentLanguage();
         });
@@ -66,6 +66,17 @@ const Modal = (function () {
             // Abrir Modal de About desde la versión Móvil
             aboutButtonMobile.addEventListener('click', () => {
                 openAboutModal();
+                const aboutContent = AboutContent.getAboutContent();
+                const existingContent = aboutModal.querySelector('#aboutContent-en');
+
+                // Inserta el contenido en el modal, después del botón de cerrar
+                const aboutModalContentContainer = aboutModal.querySelector('.flex.justify-between.items-center.mb-4').parentNode;
+                if (!existingContent) {
+                    aboutModalContentContainer.insertAdjacentHTML('beforeend', aboutContent);
+                }
+
+                // Asegúrate de que el contenido se muestre en el idioma correcto
+                updateAboutContentLanguage();
                 // Opcional: Cerrar el menú móvil después de abrir la modal
                 hideMobileMenu();
             });
@@ -125,6 +136,7 @@ const Modal = (function () {
     // **Funciones para la Modal "About"**
     function openAboutModal() {
         Points.updateCountdownDisplay();
+        aboutModal.classList.remove('hidden');
     }
 
     function hideAboutModal() {
