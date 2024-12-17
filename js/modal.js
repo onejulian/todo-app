@@ -19,6 +19,10 @@ const Modal = (function () {
     function init(Points) {
         // Mostrar Modal de Puntos
         document.getElementById('showPoints').addEventListener('click', () => {
+            const currentPoints = Points.getPoints();
+            if (currentPoints < 50) {
+                return;
+            }
             pointsModal.classList.remove('hidden');
             Points.updateCountdownDisplay();
         });
